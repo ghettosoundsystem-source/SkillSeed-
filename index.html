@@ -29,7 +29,7 @@
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, AI coaching, and age-tailored progression.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, lessons, and age-tailored progression.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier -->
@@ -39,7 +39,7 @@
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£5.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ Full quest library</li>
+                            <li>✅ Full quest & lesson library</li>
                             <li>✅ AI Quest Coach</li>
                             <li>✅ Parent verification</li>
                         </ul>
@@ -74,6 +74,26 @@
                 </div>
                 <p id="licenseError" class="text-xs text-rose-500 hidden pt-1">Invalid license key. Please check and try again.</p>
                 <button onclick="closePaywallModal()" class="text-xs text-slate-500 underline">Close & Continue Testing App</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LESSON DETAIL MODAL -->
+    <div id="lessonModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+                <div class="flex items-center gap-2">
+                    <span id="lessonIcon" class="text-2xl">📖</span>
+                    <h3 id="lessonTitle" class="font-bold text-slate-900 text-lg">Lesson Title</h3>
+                </div>
+                <button onclick="closeLessonModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+            </div>
+            <div id="lessonContent" class="space-y-4 text-sm text-slate-700 mb-6">
+                <!-- Injected via JS -->
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex gap-3">
+                <button onclick="closeLessonModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-all">Close</button>
+                <button id="lessonSubmitBtn" onclick="" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md">Mark Complete & Submit</button>
             </div>
         </div>
     </div>
@@ -191,24 +211,168 @@
         let totalXp = 50;
 
         let quests = [
-            { id: 1, age: '6-8', title: 'Tie Shoelaces Swiftly', category: 'Self-Reliance', xp: 30, desc: 'Master the double-loop or standard knot and tie your shoes independently.', completed: true, pending: false, badge: '👟 Knot Master' },
-            { id: 2, age: '6-8', title: 'Plant Seeds in Soil', category: 'Earth & Garden', xp: 40, desc: 'Plant vegetable or flower seeds in pots or soil and water them daily.', completed: false, pending: false, badge: '🌱 Green Thumb' },
-            { id: 3, age: '6-8', title: 'Bake Simple Biscuits', category: 'Kitchen Craft', xp: 50, desc: 'Measure out ingredients and help bake a simple batch of biscuits safely.', completed: false, pending: false, badge: '🍪 Junior Baker' },
-            { id: 4, age: '6-8', title: 'Make Your Own Bed', category: 'Self-Reliance', xp: 25, desc: 'Straighten sheets, fluff pillows, and pull up your duvet neatly every morning for a week.', completed: false, pending: false, badge: '🛏️ Tidiness Champ' },
-            { id: 5, age: '6-8', title: 'Feed & Water Household Pet', category: 'Earth & Garden', xp: 35, desc: 'Take responsibility for measuring food and fresh water for a family pet.', completed: false, pending: false, badge: '🐾 Animal Friend' },
-            { id: 6, age: '6-8', title: 'Basic First Aid Plaster Application', category: 'Self-Reliance', xp: 45, desc: 'Clean a minor graze with antiseptic wipe and apply a plaster correctly.', completed: false, pending: false, badge: '🩹 Safety Cadet' },
-            { id: 7, age: '9-11', title: 'Mend a Bike Puncture', category: 'Mechanical & Build', xp: 100, desc: 'Remove a bicycle inner tube, locate a puncture in water, patch it securely, and remount.', completed: false, pending: false, badge: '🔧 Junior Mechanic' },
-            { id: 8, age: '9-11', title: 'Cook a Family Breakfast', category: 'Kitchen Craft', xp: 80, desc: 'Safely cook scrambled eggs or porridge on the hob with adult supervision.', completed: false, pending: false, badge: '🍳 Morning Chef' },
-            { id: 9, age: '9-11', title: 'Grow Vegetables from Scraps', category: 'Earth & Garden', xp: 70, desc: 'Regrow spring onions or root vegetables from kitchen scraps in water and soil.', completed: false, pending: false, badge: '🌿 Eco Sprout' },
-            { id: 10, age: '9-11', title: 'Build a Bird Box or Habitat Pod', category: 'Mechanical & Build', xp: 120, desc: 'Construct a simple wooden bird nesting box or solitary bee house using basic hand tools.', completed: false, pending: false, badge: '🪵 Master Builder' },
-            { id: 11, age: '9-11', title: 'Sew on a Loose Button', category: 'Self-Reliance', xp: 60, desc: 'Thread a needle independently and securely sew a loose button back onto a garment.', completed: false, pending: false, badge: '🪡 Stitch Master' },
-            { id: 12, age: '9-11', title: 'Map Reading & Compass Navigation', category: 'Self-Reliance', xp: 90, desc: 'Navigate a local park trail using a physical Ordnance Survey map and compass.', completed: false, pending: false, badge: '🧭 Pathfinder' },
-            { id: 13, age: '12-16', title: 'Basic Car Maintenance & Fluid Checks', category: 'Mechanical & Build', xp: 150, desc: 'Safely check engine oil dipstick, coolant levels, screen wash, and measure tire pressures.', completed: false, pending: false, badge: '🚗 Auto Technician' },
-            { id: 14, age: '12-16', title: 'Household Budgeting & Expense Tracking', category: 'Finance', xp: 130, desc: 'Create a simulated monthly household budget accounting for bills, food, and savings.', completed: false, pending: false, badge: '📊 Financial Planner' },
-            { id: 15, age: '12-16', title: 'Cook a Complete Three-Course Meal', category: 'Kitchen Craft', xp: 200, desc: 'Plan, budget, prepare, and cook a full dinner party meal from scratch unassisted.', completed: false, pending: false, badge: '👨‍🍳 Master Chef' },
-            { id: 16, age: '12-16', title: 'Woodworking Joint & Sawing Mastery', category: 'Mechanical & Build', xp: 160, desc: 'Measure timber precisely with a square and cut a clean half-lap or mortise joint.', completed: false, pending: false, badge: '🪚 Master Craftsman' },
-            { id: 17, age: '12-16', title: 'Emergency CPR & First Aid Certification', category: 'Self-Reliance', xp: 180, desc: 'Learn CPR chest compression techniques, recovery position, and choking response.', completed: false, pending: false, badge: '❤️ Life Saver' },
-            { id: 18, age: '12-16', title: 'Wilderness Shelter & Fire Lighting', category: 'Self-Reliance', xp: 170, desc: 'Construct a waterproof lean-to shelter and safely strike a spark with a ferro rod.', completed: false, pending: false, badge: '⛺ Wilderness Scout' }
+            { 
+                id: 1, age: '6-8', title: 'Tie Shoelaces Swiftly', category: 'Self-Reliance', xp: 30, badge: '👟 Knot Master',
+                desc: 'Master the double-loop or standard knot and tie your shoes independently.',
+                steps: [
+                    "1. Cross the two lace ends into a simple starting knot and pull snug.",
+                    "2. Form two 'rabbit ears' (loops) with each end of the laces.",
+                    "3. Cross one loop over the other to form a bridge, tuck it under, and pull both loops tight!"
+                ]
+            },
+            { 
+                id: 2, age: '6-8', title: 'Plant Seeds in Soil', category: 'Earth & Garden', xp: 40, badge: '🌱 Green Thumb',
+                desc: 'Plant vegetable or flower seeds in pots or soil and water them daily.',
+                steps: [
+                    "1. Fill a small pot or garden tray with clean, moist potting soil.",
+                    "2. Poke small holes with your finger about 1cm deep in the soil.",
+                    "3. Drop one seed in each hole, cover gently with soil, and give it a gentle mist of water."
+                ]
+            },
+            { 
+                id: 3, age: '6-8', title: 'Bake Simple Biscuits', category: 'Kitchen Craft', xp: 50, badge: '🍪 Junior Baker',
+                desc: 'Measure out ingredients and help bake a simple batch of biscuits safely.',
+                steps: [
+                    "1. Wash your hands thoroughly and preheat the oven with an adult's help.",
+                    "2. Measure out flour, butter, and sugar precisely using measuring cups or scales.",
+                    "3. Mix ingredients into a dough, shape into small balls on a tray, and bake until golden."
+                ]
+            },
+            { 
+                id: 4, age: '6-8', title: 'Make Your Own Bed', category: 'Self-Reliance', xp: 25, badge: '🛏️ Tidiness Champ',
+                desc: 'Straighten sheets, fluff pillows, and pull up your duvet neatly every morning for a week.',
+                steps: [
+                    "1. Pull the bottom sheet tight so there are no wrinkles or creases.",
+                    "2. Smooth out your duvet or blankets all the way up to the head of the bed.",
+                    "3. Fluff your pillows nicely and place them neatly at the top."
+                ]
+            },
+            { 
+                id: 5, age: '6-8', title: 'Feed & Water Household Pet', category: 'Earth & Garden', xp: 35, badge: '🐾 Animal Friend',
+                desc: 'Take responsibility for measuring food and fresh water for a family pet.',
+                steps: [
+                    "1. Check the pet's food guidelines with an adult to measure the correct portion.",
+                    "2. Wash out the water bowl thoroughly and fill it to the brim with clean, fresh water.",
+                    "3. Place food and water bowls in their designated feeding spots."
+                ]
+            },
+            { 
+                id: 6, age: '6-8', title: 'Basic First Aid Plaster Application', category: 'Self-Reliance', xp: 45, badge: '🩹 Safety Cadet',
+                desc: 'Clean a minor graze with antiseptic wipe and apply a plaster correctly.',
+                steps: [
+                    "1. Wash your hands before touching any first aid supplies.",
+                    "2. Gently clean around a minor scrape or graze using an antiseptic wipe.",
+                    "3. Unwrap a clean plaster and apply it smoothly so the pad covers the wound without creases."
+                ]
+            },
+            { 
+                id: 7, age: '9-11', title: 'Mend a Bike Puncture', category: 'Mechanical & Build', xp: 100, badge: '🔧 Junior Mechanic',
+                desc: 'Remove a bicycle inner tube, locate a puncture in water, patch it securely, and remount.',
+                steps: [
+                    "1. Unclip the brakes and remove the wheel using spanners or quick-release levers.",
+                    "2. Use tyre levers to carefully pop one side of the tyre off the rim and pull out the inner tube.",
+                    "3. Pump up the tube slightly and submerge in water to find bubbles (the leak). Roughen around the leak with sandpaper, apply glue, press the patch firmly, and reassemble."
+                ]
+            },
+            { 
+                id: 8, age: '9-11', title: 'Cook a Family Breakfast', category: 'Kitchen Craft', xp: 80, badge: '🍳 Morning Chef',
+                desc: 'Safely cook scrambled eggs or porridge on the hob with adult supervision.',
+                steps: [
+                    "1. Gather your ingredients (eggs, milk, butter, or oats and milk).",
+                    "2. Whisk eggs in a bowl or measure oats into a pan with liquid.",
+                    "3. Cook over medium-low heat, stirring constantly with a wooden spoon until cooked to perfection."
+                ]
+            },
+            { 
+                id: 9, age: '9-11', title: 'Grow Vegetables from Scraps', category: 'Earth & Garden', xp: 70, badge: '🌿 Eco Sprout',
+                desc: 'Regrow spring onions or root vegetables from kitchen scraps in water and soil.',
+                steps: [
+                    "1. Save root ends of vegetables like spring onions, celery, or romaine lettuce.",
+                    "2. Place them upright in a small dish with a shallow layer of fresh water on a sunny windowsill.",
+                    "3. Change the water every 2 days until fresh green shoots appear, then plant them into soil."
+                ]
+            },
+            { 
+                id: 10, age: '9-11', title: 'Build a Bird Box or Habitat Pod', category: 'Mechanical & Build', xp: 120, badge: '🪵 Master Builder',
+                desc: 'Construct a simple wooden bird nesting box or solitary bee house using basic hand tools.',
+                steps: [
+                    "1. Measure and cut untreated timber panels to specification (base, walls, roof).",
+                    "2. Pre-drill screw holes to prevent the timber from splitting.",
+                    "3. Assemble securely using exterior screws or galvanized nails and hang in a safe, sheltered tree."
+                ]
+            },
+            { 
+                id: 11, age: '9-11', title: 'Sew on a Loose Button', category: 'Self-Reliance', xp: 60, badge: '🪡 Stitch Master',
+                desc: 'Thread a needle independently and securely sew a loose button back onto a garment.',
+                steps: [
+                    "1. Thread a needle with matching thread and tie a secure knot at the double ends.",
+                    "2. Push the needle through the fabric from the inside out right where the button belongs.",
+                    "3. Pass through the button holes in an 'X' shape 4-5 times, then wrap thread around the base to create a shank and tie off securely."
+                ]
+            },
+            { 
+                id: 12, age: '9-11', title: 'Map Reading & Compass Navigation', category: 'Self-Reliance', xp: 90, badge: '🧭 Pathfinder',
+                desc: 'Navigate a local park trail using a physical Ordnance Survey map and compass.',
+                steps: [
+                    "1. Lay the OS map flat and align the compass housing with grid north.",
+                    "2. Identify prominent surrounding landmarks (hills, rivers, paths) on the map.",
+                    "3. Take a bearing toward your destination checkpoint and follow your compass heading."
+                ]
+            },
+            { 
+                id: 13, age: '12-16', title: 'Basic Car Maintenance & Fluid Checks', category: 'Mechanical & Build', xp: 150, badge: '🚗 Auto Technician',
+                desc: 'Safely check engine oil dipstick, coolant levels, screen wash, and measure tire pressures.',
+                steps: [
+                    "1. Ensure the car is parked on flat ground with the engine switched off and cold.",
+                    "2. Pull the oil dipstick, wipe clean with a cloth, reinsert fully, and check oil level is between min and max.",
+                    "3. Inspect coolant and screen wash expansion tanks visually, and use a pressure gauge to check tire pressures against manufacturer door placard."
+                ]
+            },
+            { 
+                id: 14, age: '12-16', title: 'Household Budgeting & Expense Tracking', category: 'Finance', xp: 130, badge: '📊 Financial Planner',
+                desc: 'Create a simulated monthly household budget accounting for bills, food, and savings.',
+                steps: [
+                    "1. List all projected monthly income sources (allowance, part-time work, gifts).",
+                    "2. Categorize fixed expenses (transport, phone, food) versus discretionary spending.",
+                    "3. Allocate a minimum of 15% towards an emergency savings fund before balancing totals."
+                ]
+            },
+            { 
+                id: 15, age: '12-16', title: 'Cook a Complete Three-Course Meal', category: 'Kitchen Craft', xp: 200, badge: '👨‍🍳 Master Chef',
+                desc: 'Plan, budget, prepare, and cook a full dinner party meal from scratch unassisted.',
+                steps: [
+                    "1. Design a balanced 3-course menu (starter, main course, dessert) and write a shopping list.",
+                    "2. Prep all ingredients beforehand (mise en place) to keep your workspace clean and organised.",
+                    "3. Time your cooking so all dishes are served hot and fresh together."
+                ]
+            },
+            { 
+                id: 16, age: '12-16', title: 'Woodworking Joint & Sawing Mastery', category: 'Mechanical & Build', xp: 160, badge: '🪚 Master Craftsman',
+                desc: 'Measure timber precisely with a square and cut a clean half-lap or mortise joint.',
+                steps: [
+                    "1. Mark timber cutting lines meticulously using a try square and marking knife.",
+                    "2. Secure the timber firmly in a workbench vice.",
+                    "3. Use a Japanese pull saw or tenon saw to cut precisely to the waste side of your pencil line."
+                ]
+            },
+            { 
+                id: 17, age: '12-16', title: 'Emergency CPR & First Aid Certification', category: 'Self-Reliance', xp: 180, badge: '❤️ Life Saver',
+                desc: 'Learn CPR chest compression techniques, recovery position, and choking response.',
+                steps: [
+                    "1. Check response and breathing, then call emergency services immediately.",
+                    "2. Interlock hands and deliver 30 rapid chest compressions at a depth of 5-6cm (100-120 bpm).",
+                    "3. Deliver 2 rescue breaths if trained, or continue continuous hands-only compressions until help arrives."
+                ]
+            },
+            { 
+                id: 18, age: '12-16', title: 'Wilderness Shelter & Fire Lighting', category: 'Self-Reliance', xp: 170, badge: '⛺ Wilderness Scout',
+                desc: 'Construct a waterproof lean-to shelter and safely strike a spark with a ferro rod.',
+                steps: [
+                    "1. Lean a sturdy ridge pole between two trees at waist height.",
+                    "2. Layer smaller branches and waterproof foliage (fronds, pine boughs) tightly over the frame.",
+                    "3. Prepare dry tinder bundle and strike a ferro rod downwards to catch a spark into a flame."
+                ]
+            }
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -234,6 +398,46 @@
 
         function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
         function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
+
+        function openLessonModal(id) {
+            const q = quests.find(item => item.id === id);
+            if (!q) return;
+
+            document.getElementById('lessonTitle').innerText = q.title;
+            const content = document.getElementById('lessonContent');
+            
+            let stepsHtml = '<div class="space-y-3"><p class="font-semibold text-slate-800">📖 Step-by-Step Lesson & Guide:</p>';
+            q.steps.forEach(step => {
+                stepsHtml += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-slate-700">${step}</div>`;
+            });
+            stepsHtml += `</div><p class="text-xs text-slate-500 italic mt-3">Reward upon verification: +${q.xp} XP and badge (${q.badge})</p>`;
+            
+            content.innerHTML = stepsHtml;
+
+            const submitBtn = document.getElementById('lessonSubmitBtn');
+            if (q.completed) {
+                submitBtn.innerText = 'Completed ✅';
+                submitBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 font-bold py-2.5 rounded-xl text-xs cursor-not-allowed';
+                submitBtn.onclick = null;
+            } else if (q.pending) {
+                submitBtn.innerText = 'Pending Parent Review ⏳';
+                submitBtn.className = 'flex-1 bg-amber-100 text-amber-700 font-bold py-2.5 rounded-xl text-xs cursor-not-allowed';
+                submitBtn.onclick = null;
+            } else {
+                submitBtn.innerText = 'Mark Complete & Submit for Review';
+                submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md';
+                submitBtn.onclick = function() {
+                    submitQuest(q.id);
+                    closeLessonModal();
+                };
+            }
+
+            document.getElementById('lessonModal').classList.remove('hidden');
+        }
+
+        function closeLessonModal() {
+            document.getElementById('lessonModal').classList.add('hidden');
+        }
 
         function setAgeGroup(age) {
             currentAgeGroup = age;
@@ -285,10 +489,11 @@
                             <h3 class="font-bold text-slate-900 mb-1 text-sm sm:text-base">${q.title}</h3>
                             <p class="text-xs text-slate-500 mb-4">${q.desc}</p>
                         </div>
-                        <div>
-                            ${q.completed ? '<span class="inline-block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
-                              q.pending ? '<span class="inline-block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Parent Review ⏳</span>' :
-                              `<button onclick="submitQuest(${q.id})" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md">Submit for Review</button>`}
+                        <div class="space-y-2">
+                            <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 Read Lesson & Guide</button>
+                            ${q.completed ? '<span class="block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
+                              q.pending ? '<span class="block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Review ⏳</span>' :
+                              `<button onclick="submitQuest(${q.id})" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs transition-all shadow-md">Submit for Review</button>`}
                         </div>
                     </div>
                 `;
