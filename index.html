@@ -212,7 +212,6 @@
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
-        // Load quests from localStorage if available, or initialize default library with 10 questions each
         let quests = JSON.parse(localStorage.getItem('skillseed_quests_data')) || [
             { 
                 id: 1, age: '6-8', title: 'Tie Shoelaces Swiftly', category: 'Self-Reliance', xp: 30, badge: '👟 Knot Master',
@@ -326,7 +325,6 @@
             });
             html += '</div>';
 
-            // Quiz Section (10 Questions)
             html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all questions correctly):</p>';
             q.quiz.forEach((item, idx) => {
                 html += `<div class="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2">
@@ -340,7 +338,6 @@
             });
             html += '</div>';
 
-            // Media Evidence Upload & Recording Section
             html += `<div class="mt-6 space-y-4 pt-4 border-t border-slate-200">
                 <p class="font-bold text-slate-900">📸 & 🎥 Upload Proof (Stored Locally):</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -384,7 +381,7 @@
             if (!q) return;
             q.quizAnswers[qIdx] = optIdx;
             saveState();
-            openLessonModal(questId); // Re-render modal to show selection highlight
+            openLessonModal(questId);
         }
 
         function handlePhotoUpload(event, questId) {
@@ -394,7 +391,7 @@
             reader.onload = function(e) {
                 const q = quests.find(item => item.id === questId);
                 if (q) {
-                    q.photoData = e.target.result; // Base64 stored in localStorage
+                    q.photoData = e.target.result;
                     saveState();
                     openLessonModal(questId);
                 }
@@ -421,7 +418,6 @@
             const q = quests.find(item => item.id === id);
             if (!q) return;
 
-            // Check if all 10 questions are answered
             const answeredCount = Object.keys(q.quizAnswers).length;
             if (answeredCount < q.quiz.length) {
                 alert(`Please answer all ${q.quiz.length} quiz questions before submitting.`);
@@ -522,7 +518,6 @@
             }
 
             pending.forEach(q => {
-                // Calculate quiz score
                 let correctCount = 0;
                 q.quiz.forEach((item, idx) => {
                     if (q.quizAnswers[idx] === item.answer) correctCount++;
