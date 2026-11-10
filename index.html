@@ -67,13 +67,13 @@
                 </div>
             </div>
 
-            <div class="border-t border-slate-100 pt-4">
+            <div class="border-t border-slate-100 pt-4 space-y-3">
                 <div class="flex items-center gap-2">
                     <input type="text" id="licenseKeyInput" placeholder="Already bought? Enter license key..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     <button onclick="verifyLicenseKey()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">Activate</button>
                 </div>
                 <p id="licenseError" class="text-xs text-rose-500 hidden pt-1">Invalid license key. Please check and try again.</p>
-                <button onclick="resetPaywallTest()" class="text-[10px] text-slate-400 underline mt-2">Force Show Payment Modal (Test)</button>
+                <button onclick="closePaywallModal()" class="text-xs text-slate-500 underline">Close & Continue Testing App</button>
             </div>
         </div>
     </div>
@@ -91,9 +91,9 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <div class="bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
-                    ⭐ <span id="totalXp">50</span> XP
-                </div>
+                <button onclick="openPaywallModal()" class="bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
+                    🔒 Pricing (£5.99 / £99)
+                </button>
                 <button onclick="openAiModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all">
                     🤖 AI Coach
                 </button>
@@ -212,9 +212,6 @@
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
-            // For testing: uncomment line below if you want to force the payment modal open
-            // localStorage.removeItem('skillseed_unlocked');
-            
             const unlocked = localStorage.getItem('skillseed_unlocked');
             if (!unlocked) {
                 document.getElementById('paywallModal').classList.remove('hidden');
@@ -235,10 +232,8 @@
             }
         }
 
-        function resetPaywallTest() {
-            localStorage.removeItem('skillseed_unlocked');
-            document.getElementById('paywallModal').classList.remove('hidden');
-        }
+        function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
+        function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
 
         function setAgeGroup(age) {
             currentAgeGroup = age;
