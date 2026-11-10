@@ -282,6 +282,16 @@
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
+            // AUTOMATIC URL LICENSE CHECKER: 
+            // If user arrives via ?key=YOUR_CODE or ?unlocked=true, auto-unlocks app!
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlKey = urlParams.get('key');
+            const isUnlockedParam = urlParams.get('unlocked');
+
+            if (urlKey || isUnlockedParam === 'true') {
+                localStorage.setItem('skillseed_unlocked', 'true');
+            }
+
             const unlocked = localStorage.getItem('skillseed_unlocked');
             if (!unlocked) {
                 document.getElementById('paywallModal').classList.remove('hidden');
