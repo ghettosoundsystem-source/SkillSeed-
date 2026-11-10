@@ -29,7 +29,7 @@
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, lessons, and age-tailored progression.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, 10-part quizzes, and multimedia verification.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier (£5.99) -->
@@ -39,9 +39,9 @@
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£5.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ Full quest & lesson library</li>
+                            <li>✅ Full quest & quiz library</li>
+                            <li>✅ Photo & video proof upload</li>
                             <li>✅ AI Quest Coach</li>
-                            <li>✅ Parent verification</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/cNi8wP3I16kI0I7fkY8EM08" target="_blank" class="mt-6 block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
@@ -58,7 +58,7 @@
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
                             <li>✅ Unlimited user accounts</li>
                             <li>✅ Group challenge mode</li>
-                            <li>✅ Priority AI support</li>
+                            <li>✅ Teacher verification dashboard</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/5kQeVd3I14cA8azc8M8EM07" target="_blank" class="mt-6 block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
@@ -78,22 +78,24 @@
         </div>
     </div>
 
-    <!-- LESSON DETAIL MODAL -->
+    <!-- LESSON & QUIZ MODAL -->
     <div id="lessonModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4 sticky top-0 bg-white z-10">
                 <div class="flex items-center gap-2">
                     <span id="lessonIcon" class="text-2xl">📖</span>
                     <h3 id="lessonTitle" class="font-bold text-slate-900 text-lg">Lesson Title</h3>
                 </div>
                 <button onclick="closeLessonModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
             </div>
-            <div id="lessonContent" class="space-y-4 text-sm text-slate-700 mb-6">
+            
+            <div id="lessonContent" class="space-y-6 text-sm text-slate-700 mb-6">
                 <!-- Injected via JS -->
             </div>
+
             <div class="pt-4 border-t border-slate-100 flex gap-3">
-                <button onclick="closeLessonModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-all">Close</button>
-                <button id="lessonSubmitBtn" onclick="" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md">Mark Complete & Submit</button>
+                <button onclick="closeLessonModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition-all">Close</button>
+                <button id="lessonSubmitBtn" onclick="" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md">Submit Evidence & Quiz</button>
             </div>
         </div>
     </div>
@@ -140,7 +142,7 @@
         <div class="flex gap-2 bg-slate-200/60 p-1.5 rounded-2xl mb-6 backdrop-blur-sm">
             <button onclick="switchTab('quests')" id="tabQuests" class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all bg-white text-slate-900 shadow-sm">Quest Board</button>
             <button onclick="switchTab('trophies')" id="tabTrophies" class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900">Trophy Room</button>
-            <button onclick="switchTab('parent')" id="tabParent" class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900">Parent Portal</button>
+            <button onclick="switchTab('parent')" id="tabParent" class="flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all text-slate-600 hover:text-slate-900">Parent / Teacher Portal</button>
         </div>
 
         <!-- TAB 1: QUEST BOARD -->
@@ -173,9 +175,9 @@
         <!-- TAB 3: PARENT PORTAL -->
         <div id="viewParent" class="hidden space-y-4">
             <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-                <h2 class="text-lg font-bold text-slate-900">Parent Sign-Off & Verification</h2>
-                <p class="text-sm text-slate-600">Review quests completed by your child and approve them to award XP and unlock badges.</p>
-                <div id="pendingVerificationList" class="space-y-3">
+                <h2 class="text-lg font-bold text-slate-900">Verification & Review Dashboard</h2>
+                <p class="text-sm text-slate-600">Review student quiz scores, uploaded photos, and recorded proof before approving.</p>
+                <div id="pendingVerificationList" class="space-y-4">
                     <!-- Pending submissions injected via JS -->
                 </div>
             </div>
@@ -210,7 +212,8 @@
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
-        let quests = [
+        // Load quests from localStorage if available, or initialize default library with 10 questions each
+        let quests = JSON.parse(localStorage.getItem('skillseed_quests_data')) || [
             { 
                 id: 1, age: '6-8', title: 'Tie Shoelaces Swiftly', category: 'Self-Reliance', xp: 30, badge: '👟 Knot Master',
                 desc: 'Master the double-loop or standard knot and tie your shoes independently.',
@@ -218,52 +221,20 @@
                     "1. Cross the two lace ends into a simple starting knot and pull snug.",
                     "2. Form two 'rabbit ears' (loops) with each end of the laces.",
                     "3. Cross one loop over the other to form a bridge, tuck it under, and pull both loops tight!"
-                ]
-            },
-            { 
-                id: 2, age: '6-8', title: 'Plant Seeds in Soil', category: 'Earth & Garden', xp: 40, badge: '🌱 Green Thumb',
-                desc: 'Plant vegetable or flower seeds in pots or soil and water them daily.',
-                steps: [
-                    "1. Fill a small pot or garden tray with clean, moist potting soil.",
-                    "2. Poke small holes with your finger about 1cm deep in the soil.",
-                    "3. Drop one seed in each hole, cover gently with soil, and give it a gentle mist of water."
-                ]
-            },
-            { 
-                id: 3, age: '6-8', title: 'Bake Simple Biscuits', category: 'Kitchen Craft', xp: 50, badge: '🍪 Junior Baker',
-                desc: 'Measure out ingredients and help bake a simple batch of biscuits safely.',
-                steps: [
-                    "1. Wash your hands thoroughly and preheat the oven with an adult's help.",
-                    "2. Measure out flour, butter, and sugar precisely using measuring cups or scales.",
-                    "3. Mix ingredients into a dough, shape into small balls on a tray, and bake until golden."
-                ]
-            },
-            { 
-                id: 4, age: '6-8', title: 'Make Your Own Bed', category: 'Self-Reliance', xp: 25, badge: '🛏️ Tidiness Champ',
-                desc: 'Straighten sheets, fluff pillows, and pull up your duvet neatly every morning for a week.',
-                steps: [
-                    "1. Pull the bottom sheet tight so there are no wrinkles or creases.",
-                    "2. Smooth out your duvet or blankets all the way up to the head of the bed.",
-                    "3. Fluff your pillows nicely and place them neatly at the top."
-                ]
-            },
-            { 
-                id: 5, age: '6-8', title: 'Feed & Water Household Pet', category: 'Earth & Garden', xp: 35, badge: '🐾 Animal Friend',
-                desc: 'Take responsibility for measuring food and fresh water for a family pet.',
-                steps: [
-                    "1. Check the pet's food guidelines with an adult to measure the correct portion.",
-                    "2. Wash out the water bowl thoroughly and fill it to the brim with clean, fresh water.",
-                    "3. Place food and water bowls in their designated feeding spots."
-                ]
-            },
-            { 
-                id: 6, age: '6-8', title: 'Basic First Aid Plaster Application', category: 'Self-Reliance', xp: 45, badge: '🩹 Safety Cadet',
-                desc: 'Clean a minor graze with antiseptic wipe and apply a plaster correctly.',
-                steps: [
-                    "1. Wash your hands before touching any first aid supplies.",
-                    "2. Gently clean around a minor scrape or graze using an antiseptic wipe.",
-                    "3. Unwrap a clean plaster and apply it smoothly so the pad covers the wound without creases."
-                ]
+                ],
+                quiz: [
+                    { q: "What is the first step when tying shoelaces?", options: ["Tie a bow immediately", "Cross the two lace ends into a starting knot", "Put shoes in the washing machine"], answer: 1 },
+                    { q: "What shape do you form with each end of the laces after the start?", options: ["Rabbit ears / loops", "A square", "A triangle"], answer: 0 },
+                    { q: "How do you lock the loops together?", options: ["Glue them", "Cross one over the other and tuck under", "Cut them"], answer: 1 },
+                    { q: "Should you pull the final knot tight?", options: ["Yes, so it stays secure", "No, leave it loose", "It doesn't matter"], answer: 0 },
+                    { q: "Can you double-knot for extra security?", options: ["Yes", "No", "Only adults can"], answer: 0 },
+                    { q: "What should you do if your laces are too long?", options: ["Tuck them in safely", "Trip over them", "Ignore them"], answer: 0 },
+                    { q: "Why is learning to tie shoes important?", options: ["For independence", "No reason", "To run slower"], answer: 0 },
+                    { q: "How often should you practice?", options: ["Once a year", "Regularly until mastered", "Never"], answer: 1 },
+                    { q: "What material are most laces made of?", options: ["Glass", "Fabric / Cotton", "Metal"], answer: 1 },
+                    { q: "Who can you ask to check your knot?", options: ["Parent or teacher", "No one", "A stranger"], answer: 0 }
+                ],
+                completed: false, pending: false, photoData: null, videoData: null, quizAnswers: {}
             },
             { 
                 id: 7, age: '9-11', title: 'Mend a Bike Puncture', category: 'Mechanical & Build', xp: 100, badge: '🔧 Junior Mechanic',
@@ -272,52 +243,20 @@
                     "1. Unclip the brakes and remove the wheel using spanners or quick-release levers.",
                     "2. Use tyre levers to carefully pop one side of the tyre off the rim and pull out the inner tube.",
                     "3. Pump up the tube slightly and submerge in water to find bubbles (the leak). Roughen around the leak with sandpaper, apply glue, press the patch firmly, and reassemble."
-                ]
-            },
-            { 
-                id: 8, age: '9-11', title: 'Cook a Family Breakfast', category: 'Kitchen Craft', xp: 80, badge: '🍳 Morning Chef',
-                desc: 'Safely cook scrambled eggs or porridge on the hob with adult supervision.',
-                steps: [
-                    "1. Gather your ingredients (eggs, milk, butter, or oats and milk).",
-                    "2. Whisk eggs in a bowl or measure oats into a pan with liquid.",
-                    "3. Cook over medium-low heat, stirring constantly with a wooden spoon until cooked to perfection."
-                ]
-            },
-            { 
-                id: 9, age: '9-11', title: 'Grow Vegetables from Scraps', category: 'Earth & Garden', xp: 70, badge: '🌿 Eco Sprout',
-                desc: 'Regrow spring onions or root vegetables from kitchen scraps in water and soil.',
-                steps: [
-                    "1. Save root ends of vegetables like spring onions, celery, or romaine lettuce.",
-                    "2. Place them upright in a small dish with a shallow layer of fresh water on a sunny windowsill.",
-                    "3. Change the water every 2 days until fresh green shoots appear, then plant them into soil."
-                ]
-            },
-            { 
-                id: 10, age: '9-11', title: 'Build a Bird Box or Habitat Pod', category: 'Mechanical & Build', xp: 120, badge: '🪵 Master Builder',
-                desc: 'Construct a simple wooden bird nesting box or solitary bee house using basic hand tools.',
-                steps: [
-                    "1. Measure and cut untreated timber panels to specification (base, walls, roof).",
-                    "2. Pre-drill screw holes to prevent the timber from splitting.",
-                    "3. Assemble securely using exterior screws or galvanized nails and hang in a safe, sheltered tree."
-                ]
-            },
-            { 
-                id: 11, age: '9-11', title: 'Sew on a Loose Button', category: 'Self-Reliance', xp: 60, badge: '🪡 Stitch Master',
-                desc: 'Thread a needle independently and securely sew a loose button back onto a garment.',
-                steps: [
-                    "1. Thread a needle with matching thread and tie a secure knot at the double ends.",
-                    "2. Push the needle through the fabric from the inside out right where the button belongs.",
-                    "3. Pass through the button holes in an 'X' shape 4-5 times, then wrap thread around the base to create a shank and tie off securely."
-                ]
-            },
-            { 
-                id: 12, age: '9-11', title: 'Map Reading & Compass Navigation', category: 'Self-Reliance', xp: 90, badge: '🧭 Pathfinder',
-                desc: 'Navigate a local park trail using a physical Ordnance Survey map and compass.',
-                steps: [
-                    "1. Lay the OS map flat and align the compass housing with grid north.",
-                    "2. Identify prominent surrounding landmarks (hills, rivers, paths) on the map.",
-                    "3. Take a bearing toward your destination checkpoint and follow your compass heading."
-                ]
+                ],
+                quiz: [
+                    { q: "What tool is used to pry the tyre off the rim?", options: ["Screwdriver", "Tyre levers", "Hammer"], answer: 1 },
+                    { q: "How do you find tiny punctures in the inner tube?", options: ["Listen in the dark", "Submerge in water for bubbles", "Smell it"], answer: 1 },
+                    { q: "What should you do to the rubber before applying glue?", options: ["Paint it", "Roughen with sandpaper", "Wipe with oil"], answer: 1 },
+                    { q: "Why do you apply vulcanising glue?", options: ["To make it sticky for the patch", "To clean dirt", "To inflate the tyre"], answer: 0 },
+                    { q: "What part of the bike holds the air?", options: ["The outer tyre", "The inner tube", "The spokes"], answer: 1 },
+                    { q: "Should you check inside the outer tyre for thorns or glass?", options: ["Yes, always", "No", "Only if it looks clean"], answer: 0 },
+                    { q: "How do you release the wheel?", options: ["Cut the chain", "Use quick-release levers or spanners", "Pull hard"], answer: 1 },
+                    { q: "What checks should you do after putting the wheel back?", options: ["Test brakes and tyre pressure", "Ride blindfolded", "Nothing"], answer: 0 },
+                    { q: "Who should supervise your first bike repair?", options: ["A responsible adult", "No one", "A pet"], answer: 0 },
+                    { q: "What skill category is this quest in?", options: ["Kitchen Craft", "Mechanical & Build", "Finance"], answer: 1 }
+                ],
+                completed: false, pending: false, photoData: null, videoData: null, quizAnswers: {}
             },
             { 
                 id: 13, age: '12-16', title: 'Basic Car Maintenance & Fluid Checks', category: 'Mechanical & Build', xp: 150, badge: '🚗 Auto Technician',
@@ -326,52 +265,20 @@
                     "1. Ensure the car is parked on flat ground with the engine switched off and cold.",
                     "2. Pull the oil dipstick, wipe clean with a cloth, reinsert fully, and check oil level is between min and max.",
                     "3. Inspect coolant and screen wash expansion tanks visually, and use a pressure gauge to check tire pressures against manufacturer door placard."
-                ]
-            },
-            { 
-                id: 14, age: '12-16', title: 'Household Budgeting & Expense Tracking', category: 'Finance', xp: 130, badge: '📊 Financial Planner',
-                desc: 'Create a simulated monthly household budget accounting for bills, food, and savings.',
-                steps: [
-                    "1. List all projected monthly income sources (allowance, part-time work, gifts).",
-                    "2. Categorize fixed expenses (transport, phone, food) versus discretionary spending.",
-                    "3. Allocate a minimum of 15% towards an emergency savings fund before balancing totals."
-                ]
-            },
-            { 
-                id: 15, age: '12-16', title: 'Cook a Complete Three-Course Meal', category: 'Kitchen Craft', xp: 200, badge: '👨‍🍳 Master Chef',
-                desc: 'Plan, budget, prepare, and cook a full dinner party meal from scratch unassisted.',
-                steps: [
-                    "1. Design a balanced 3-course menu (starter, main course, dessert) and write a shopping list.",
-                    "2. Prep all ingredients beforehand (mise en place) to keep your workspace clean and organised.",
-                    "3. Time your cooking so all dishes are served hot and fresh together."
-                ]
-            },
-            { 
-                id: 16, age: '12-16', title: 'Woodworking Joint & Sawing Mastery', category: 'Mechanical & Build', xp: 160, badge: '🪚 Master Craftsman',
-                desc: 'Measure timber precisely with a square and cut a clean half-lap or mortise joint.',
-                steps: [
-                    "1. Mark timber cutting lines meticulously using a try square and marking knife.",
-                    "2. Secure the timber firmly in a workbench vice.",
-                    "3. Use a Japanese pull saw or tenon saw to cut precisely to the waste side of your pencil line."
-                ]
-            },
-            { 
-                id: 17, age: '12-16', title: 'Emergency CPR & First Aid Certification', category: 'Self-Reliance', xp: 180, badge: '❤️ Life Saver',
-                desc: 'Learn CPR chest compression techniques, recovery position, and choking response.',
-                steps: [
-                    "1. Check response and breathing, then call emergency services immediately.",
-                    "2. Interlock hands and deliver 30 rapid chest compressions at a depth of 5-6cm (100-120 bpm).",
-                    "3. Deliver 2 rescue breaths if trained, or continue continuous hands-only compressions until help arrives."
-                ]
-            },
-            { 
-                id: 18, age: '12-16', title: 'Wilderness Shelter & Fire Lighting', category: 'Self-Reliance', xp: 170, badge: '⛺ Wilderness Scout',
-                desc: 'Construct a waterproof lean-to shelter and safely strike a spark with a ferro rod.',
-                steps: [
-                    "1. Lean a sturdy ridge pole between two trees at waist height.",
-                    "2. Layer smaller branches and waterproof foliage (fronds, pine boughs) tightly over the frame.",
-                    "3. Prepare dry tinder bundle and strike a ferro rod downwards to catch a spark into a flame."
-                ]
+                ],
+                quiz: [
+                    { q: "What condition should the engine be in when checking oil?", options: ["Hot and running", "Cold and parked on flat ground", "Anytime"], answer: 1 },
+                    { q: "What tool measures engine oil level?", options: ["Dipstick", "Thermometer", "Pressure gauge"], answer: 0 },
+                    { q: "Where should the oil mark be on the dipstick?", options: ["Above max", "Between min and max markers", "Below min"], answer: 1 },
+                    { q: "What fluid keeps the engine from overheating?", options: ["Screen wash", "Engine coolant", "Fuel"], answer: 1 },
+                    { q: "Where can you find correct tire pressure specifications?", options: ["On the tyre itself", "Driver's door placard / manual", "Guess it"], answer: 1 },
+                    { q: "Why is correct tire pressure important?", options: ["Safety, fuel economy, and wear", "No importance", "Makes car slower"], answer: 0 },
+                    { q: "What liquid is used to clean the windscreen?", options: ["Screen wash", "Brake fluid", "Engine oil"], answer: 0 },
+                    { q: "When should you check fluid levels?", options: ["Monthly or before long journeys", "Never", "Only after breaking down"], answer: 0 },
+                    { q: "What safety gear is recommended when working around cars?", options: ["Gloves and eye protection", "None", "Swimwear"], answer: 0 },
+                    { q: "Who must verify this test?", options: ["Parent or teacher", "No one", "A mechanic only"], answer: 0 }
+                ],
+                completed: false, pending: false, photoData: null, videoData: null, quizAnswers: {}
             }
         ];
 
@@ -384,6 +291,10 @@
             renderTrophies();
             renderParentPortal();
         });
+
+        function saveState() {
+            localStorage.setItem('skillseed_quests_data', JSON.stringify(quests));
+        }
 
         function verifyLicenseKey() {
             const key = document.getElementById('licenseKeyInput').value.trim();
@@ -399,40 +310,130 @@
         function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
         function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
 
+        let activeQuestId = null;
+
         function openLessonModal(id) {
             const q = quests.find(item => item.id === id);
             if (!q) return;
+            activeQuestId = id;
 
             document.getElementById('lessonTitle').innerText = q.title;
             const content = document.getElementById('lessonContent');
             
-            let stepsHtml = '<div class="space-y-3"><p class="font-semibold text-slate-800">📖 Step-by-Step Lesson & Guide:</p>';
+            let html = '<div class="space-y-3"><p class="font-bold text-slate-900">📖 Step-by-Step Lesson & Guide:</p>';
             q.steps.forEach(step => {
-                stepsHtml += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-slate-700">${step}</div>`;
+                html += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-slate-700">${step}</div>`;
             });
-            stepsHtml += `</div><p class="text-xs text-slate-500 italic mt-3">Reward upon verification: +${q.xp} XP and badge (${q.badge})</p>`;
-            
-            content.innerHTML = stepsHtml;
+            html += '</div>';
+
+            // Quiz Section (10 Questions)
+            html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all questions correctly):</p>';
+            q.quiz.forEach((item, idx) => {
+                html += `<div class="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2">
+                    <p class="font-semibold text-xs text-indigo-900">Q${idx+1}: ${item.q}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">`;
+                item.options.forEach((opt, oIdx) => {
+                    const isSelected = q.quizAnswers[idx] === oIdx ? 'bg-indigo-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200';
+                    html += `<button onclick="selectQuizAnswer(${id}, ${idx}, ${oIdx})" class="p-2 rounded-xl text-xs transition-all text-center ${isSelected}">${opt}</button>`;
+                });
+                html += `</div></div>`;
+            });
+            html += '</div>';
+
+            // Media Evidence Upload & Recording Section
+            html += `<div class="mt-6 space-y-4 pt-4 border-t border-slate-200">
+                <p class="font-bold text-slate-900">📸 & 🎥 Upload Proof (Stored Locally):</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
+                        <label class="block text-xs font-bold text-slate-700">Take / Upload Photo Proof</label>
+                        <input type="file" accept="image/*" capture="environment" onchange="handlePhotoUpload(event, ${id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                        ${q.photoData ? '<span class="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-md font-bold">Photo Attached ✅</span>' : ''}
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
+                        <label class="block text-xs font-bold text-slate-700">Record Video / Audio Proof</label>
+                        <input type="file" accept="video/*,audio/*" capture="camcorder" onchange="handleVideoUpload(event, ${id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        ${q.videoData ? '<span class="inline-block text-[10px] bg-indigo-100 text-indigo-800 px-2 py-1 rounded-md font-bold">Recording Attached ✅</span>' : ''}
+                    </div>
+                </div>
+            </div>`;
+
+            content.innerHTML = html;
 
             const submitBtn = document.getElementById('lessonSubmitBtn');
             if (q.completed) {
                 submitBtn.innerText = 'Completed ✅';
-                submitBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 font-bold py-2.5 rounded-xl text-xs cursor-not-allowed';
+                submitBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
                 submitBtn.onclick = null;
             } else if (q.pending) {
-                submitBtn.innerText = 'Pending Parent Review ⏳';
-                submitBtn.className = 'flex-1 bg-amber-100 text-amber-700 font-bold py-2.5 rounded-xl text-xs cursor-not-allowed';
+                submitBtn.innerText = 'Pending Review by Parent/Teacher ⏳';
+                submitBtn.className = 'flex-1 bg-amber-100 text-amber-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
                 submitBtn.onclick = null;
             } else {
-                submitBtn.innerText = 'Mark Complete & Submit for Review';
-                submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md';
+                submitBtn.innerText = 'Submit Quiz & Evidence for Review';
+                submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md';
                 submitBtn.onclick = function() {
-                    submitQuest(q.id);
-                    closeLessonModal();
+                    submitQuestWithValidation(id);
                 };
             }
 
             document.getElementById('lessonModal').classList.remove('hidden');
+        }
+
+        function selectQuizAnswer(questId, qIdx, optIdx) {
+            const q = quests.find(item => item.id === questId);
+            if (!q) return;
+            q.quizAnswers[qIdx] = optIdx;
+            saveState();
+            openLessonModal(questId); // Re-render modal to show selection highlight
+        }
+
+        function handlePhotoUpload(event, questId) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const q = quests.find(item => item.id === questId);
+                if (q) {
+                    q.photoData = e.target.result; // Base64 stored in localStorage
+                    saveState();
+                    openLessonModal(questId);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleVideoUpload(event, questId) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const q = quests.find(item => item.id === questId);
+                if (q) {
+                    q.videoData = e.target.result;
+                    saveState();
+                    openLessonModal(questId);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function submitQuestWithValidation(id) {
+            const q = quests.find(item => item.id === id);
+            if (!q) return;
+
+            // Check if all 10 questions are answered
+            const answeredCount = Object.keys(q.quizAnswers).length;
+            if (answeredCount < q.quiz.length) {
+                alert(`Please answer all ${q.quiz.length} quiz questions before submitting.`);
+                return;
+            }
+
+            q.pending = true;
+            saveState();
+            renderQuests();
+            renderParentPortal();
+            closeLessonModal();
+            alert('Quest submitted successfully with your quiz answers and media proof! Awaiting parent/teacher review.');
         }
 
         function closeLessonModal() {
@@ -490,10 +491,10 @@
                             <p class="text-xs text-slate-500 mb-4">${q.desc}</p>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 Read Lesson & Guide</button>
+                            <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 Lesson, Quiz & Proof</button>
                             ${q.completed ? '<span class="block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
                               q.pending ? '<span class="block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Review ⏳</span>' :
-                              `<button onclick="submitQuest(${q.id})" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-xl text-xs transition-all shadow-md">Submit for Review</button>`}
+                              `<span class="block w-full text-center py-1.5 text-[10px] text-slate-400 italic">Complete quiz & media to submit</span>`}
                         </div>
                     </div>
                 `;
@@ -510,15 +511,6 @@
             renderQuests(cat);
         }
 
-        function submitQuest(id) {
-            const q = quests.find(item => item.id === id);
-            if (q) {
-                q.pending = true;
-                renderQuests();
-                renderParentPortal();
-            }
-        }
-
         function renderParentPortal() {
             const container = document.getElementById('pendingVerificationList');
             container.innerHTML = '';
@@ -530,14 +522,29 @@
             }
 
             pending.forEach(q => {
+                // Calculate quiz score
+                let correctCount = 0;
+                q.quiz.forEach((item, idx) => {
+                    if (q.quizAnswers[idx] === item.answer) correctCount++;
+                });
+
                 container.innerHTML += `
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/60">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md">Ages ${q.age}</span>
-                            <h4 class="font-bold text-sm text-slate-900 mt-1">${q.title}</h4>
-                            <p class="text-xs text-slate-500">Reward: +${q.xp} XP & Badge (${q.badge})</p>
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md">Ages ${q.age}</span>
+                                <h4 class="font-bold text-sm text-slate-900 mt-1">${q.title}</h4>
+                                <p class="text-xs text-slate-500">Reward: +${q.xp} XP & Badge (${q.badge})</p>
+                            </div>
+                            <button onclick="approveQuest(${q.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-md">Approve & Mark Complete</button>
                         </div>
-                        <button onclick="approveQuest(${q.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20">Approve</button>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/60 text-xs space-y-1">
+                            <p class="font-semibold text-indigo-900">✍️ Quiz Score: <span class="text-emerald-600 font-bold">${correctCount} / ${q.quiz.length} correct</span></p>
+                            <div class="flex gap-4 pt-2">
+                                ${q.photoData ? `<a href="${q.photoData}" target="_blank" class="text-indigo-600 underline font-medium">📷 View Uploaded Photo</a>` : '<span class="text-slate-400">No photo attached</span>'}
+                                ${q.videoData ? `<a href="${q.videoData}" target="_blank" class="text-indigo-600 underline font-medium">🎥 View Recorded Media</a>` : '<span class="text-slate-400">No recording attached</span>'}
+                            </div>
+                        </div>
                     </div>
                 `;
             });
@@ -550,6 +557,7 @@
                 q.completed = true;
                 totalXp += q.xp;
                 document.getElementById('totalXp').innerText = totalXp;
+                saveState();
                 renderQuests();
                 renderTrophies();
                 renderParentPortal();
