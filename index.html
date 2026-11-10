@@ -25,25 +25,51 @@
 
     <!-- PAYWALL / ACCESS GATE OVERLAY -->
     <div id="paywallModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-slate-100 text-center relative overflow-hidden">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl border border-slate-100 text-center relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, AI coaching, and age-tailored progression. Get lifetime access for your household.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with gamified real-world life skills, AI coaching, and age-tailored progression.</p>
             
-            <div class="bg-slate-50 rounded-2xl p-4 mb-6 border border-slate-200/60 text-left space-y-2">
-                <div class="flex items-center text-sm text-slate-700">✅ Massive library of age-tailored real-world quests</div>
-                <div class="flex items-center text-sm text-slate-700">✅ Built-in Gemini AI Life Skills Coach</div>
-                <div class="flex items-center text-sm text-slate-700">✅ Parent verification & Trophy Room</div>
-                <div class="flex items-center text-sm text-slate-700">✅ Lifetime updates & cross-device sync</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
+                <!-- Single User Tier -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg">Single Household</span>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-3">£5.99</h3>
+                        <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
+                        <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
+                            <li>✅ Full quest library</li>
+                            <li>✅ AI Quest Coach</li>
+                            <li>✅ Parent verification</li>
+                        </ul>
+                    </div>
+                    <a href="https://gumroad.com" target="_blank" class="mt-6 block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
+                        Get Single Access
+                    </a>
+                </div>
+
+                <!-- Group / Class Tier -->
+                <div class="bg-indigo-50/50 border border-indigo-200 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2.5 py-1 rounded-lg">Group & Class</span>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-3">£99.99</h3>
+                        <p class="text-xs text-slate-500 mt-1">Lifetime access for classrooms or clubs with leaderboards.</p>
+                        <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
+                            <li>✅ Unlimited user accounts</li>
+                            <li>✅ Group challenge mode</li>
+                            <li>✅ Priority AI support</li>
+                        </ul>
+                    </div>
+                    <a href="https://gumroad.com" target="_blank" class="mt-6 block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
+                        Get Group Access
+                    </a>
+                </div>
             </div>
 
-            <div class="space-y-3">
-                <a href="https://gumroad.com" target="_blank" class="block w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-600/20 transition-all text-center">
-                    Get Lifetime Access ($19)
-                </a>
-                <div class="flex items-center gap-2 pt-2">
-                    <input type="text" id="licenseKeyInput" placeholder="Enter your license key..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <div class="border-t border-slate-100 pt-4">
+                <div class="flex items-center gap-2">
+                    <input type="text" id="licenseKeyInput" placeholder="Already bought? Enter license key..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                     <button onclick="verifyLicenseKey()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">Activate</button>
                 </div>
                 <p id="licenseError" class="text-xs text-rose-500 hidden pt-1">Invalid license key. Please check and try again.</p>
@@ -65,7 +91,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <div class="bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
-                    ⭐ <span id="totalXp">0</span> XP
+                    ⭐ <span id="totalXp">50</span> XP
                 </div>
                 <button onclick="openAiModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all">
                     🤖 AI Coach
@@ -163,216 +189,17 @@
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
-        // Massive Expanded Quest Library categorized by Age Group
         let quests = [
-            // --- AGES 6-8 ---
             { id: 1, age: '6-8', title: 'Tie Shoelaces Swiftly', category: 'Self-Reliance', xp: 30, desc: 'Master the double-loop or standard knot and tie your shoes independently.', completed: true, pending: false, badge: '👟 Knot Master' },
             { id: 2, age: '6-8', title: 'Plant Seeds in Soil', category: 'Earth & Garden', xp: 40, desc: 'Plant vegetable or flower seeds in pots or soil and water them daily.', completed: false, pending: false, badge: '🌱 Green Thumb' },
             { id: 3, age: '6-8', title: 'Bake Simple Biscuits', category: 'Kitchen Craft', xp: 50, desc: 'Measure out ingredients and help bake a simple batch of biscuits safely.', completed: false, pending: false, badge: '🍪 Junior Baker' },
             { id: 4, age: '6-8', title: 'Make Your Own Bed', category: 'Self-Reliance', xp: 25, desc: 'Straighten sheets, fluff pillows, and pull up your duvet neatly every morning for a week.', completed: false, pending: false, badge: '🛏️ Tidiness Champ' },
             { id: 5, age: '6-8', title: 'Feed & Water Household Pet', category: 'Earth & Garden', xp: 35, desc: 'Take responsibility for measuring food and fresh water for a family pet.', completed: false, pending: false, badge: '🐾 Animal Friend' },
             { id: 6, age: '6-8', title: 'Basic First Aid Plaster Application', category: 'Self-Reliance', xp: 45, desc: 'Clean a minor graze with antiseptic wipe and apply a plaster correctly.', completed: false, pending: false, badge: '🩹 Safety Cadet' },
-
-            // --- AGES 9-11 ---
             { id: 7, age: '9-11', title: 'Mend a Bike Puncture', category: 'Mechanical & Build', xp: 100, desc: 'Remove a bicycle inner tube, locate a puncture in water, patch it securely, and remount.', completed: false, pending: false, badge: '🔧 Junior Mechanic' },
             { id: 8, age: '9-11', title: 'Cook a Family Breakfast', category: 'Kitchen Craft', xp: 80, desc: 'Safely cook scrambled eggs or porridge on the hob with adult supervision.', completed: false, pending: false, badge: '🍳 Morning Chef' },
             { id: 9, age: '9-11', title: 'Grow Vegetables from Scraps', category: 'Earth & Garden', xp: 70, desc: 'Regrow spring onions or root vegetables from kitchen scraps in water and soil.', completed: false, pending: false, badge: '🌿 Eco Sprout' },
             { id: 10, age: '9-11', title: 'Build a Bird Box or Habitat Pod', category: 'Mechanical & Build', xp: 120, desc: 'Construct a simple wooden bird nesting box or solitary bee house using basic hand tools.', completed: false, pending: false, badge: '🪵 Master Builder' },
             { id: 11, age: '9-11', title: 'Sew on a Loose Button', category: 'Self-Reliance', xp: 60, desc: 'Thread a needle independently and securely sew a loose button back onto a garment.', completed: false, pending: false, badge: '🪡 Stitch Master' },
             { id: 12, age: '9-11', title: 'Map Reading & Compass Navigation', category: 'Self-Reliance', xp: 90, desc: 'Navigate a local park trail using a physical Ordnance Survey map and compass.', completed: false, pending: false, badge: '🧭 Pathfinder' },
-
-            // --- AGES 12-16 ---
-            { id: 13, age: '12-16', title: 'Basic Car Maintenance & Fluid Checks', category: 'Mechanical & Build', xp: 150, desc: 'Safely check engine oil dipstick, coolant levels, screen wash, and measure tire pressures.', completed: false, pending: false, badge: '🚗 Auto Technician' },
-            { id: 14, age: '12-16', title: 'Household Budgeting & Expense Tracking', category: 'Finance', xp: 130, desc: 'Create a simulated monthly household budget accounting for bills, food, and savings.', completed: false, pending: false, badge: '📊 Financial Planner' },
-            { id: 15, age: '12-16', title: 'Cook a Complete Three-Course Meal', category: 'Kitchen Craft', xp: 200, desc: 'Plan, budget, prepare, and cook a full dinner party meal from scratch unassisted.', completed: false, pending: false, badge: '👨‍🍳 Master Chef' },
-            { id: 16, age: '12-16', title: 'Woodworking Joint & Sawing Mastery', category: 'Mechanical & Build', xp: 160, desc: 'Measure timber precisely with a square and cut a clean half-lap or mortise joint.', completed: false, pending: false, badge: '🪚 Master Craftsman' },
-            { id: 17, age: '12-16', title: 'Emergency CPR & First Aid Certification', category: 'Self-Reliance', xp: 180, desc: 'Learn CPR chest compression techniques, recovery position, and choking response.', completed: false, pending: false, badge: '❤️ Life Saver' },
-            { id: 18, age: '12-16', title: 'Wilderness Shelter & Fire Lighting', category: 'Self-Reliance', xp: 170, desc: 'Construct a waterproof lean-to shelter and safely strike a spark with a ferro rod.', completed: false, pending: false, badge: '⛺ Wilderness Scout' }
-        ];
-
-        // Check License on Load
-        window.addEventListener('DOMContentLoaded', () => {
-            const unlocked = localStorage.getItem('skillseed_unlocked');
-            if (!unlocked) {
-                document.getElementById('paywallModal').classList.remove('hidden');
-            }
-            renderQuests();
-            renderTrophies();
-            renderParentPortal();
-        });
-
-        function verifyLicenseKey() {
-            const key = document.getElementById('licenseKeyInput').value.trim();
-            if (key === 'VIP2026' || key.length >= 6) {
-                localStorage.setItem('skillseed_unlocked', 'true');
-                document.getElementById('paywallModal').classList.add('hidden');
-            } else {
-                document.getElementById('licenseError').classList.remove('hidden');
-            }
-        }
-
-        function setAgeGroup(age) {
-            currentAgeGroup = age;
-            ['6-8', '9-11', '12-16'].forEach(a => {
-                const btn = document.getElementById('ageBtn' + a);
-                if (a === age) {
-                    btn.className = 'flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all bg-emerald-600 text-white shadow-md shadow-emerald-600/20';
-                } else {
-                    btn.className = 'flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200';
-                }
-            });
-            document.getElementById('questHeaderTitle').innerText = `Quests for Ages ${age}`;
-            renderQuests();
-        }
-
-        function switchTab(tab) {
-            ['quests', 'trophies', 'parent'].forEach(t => {
-                document.getElementById('view' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('hidden');
-                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
-                document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.add('text-slate-600');
-            });
-            document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('bg-white', 'text-slate-900', 'shadow-sm');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('text-slate-600');
-        }
-
-        function renderQuests(filter = 'all') {
-            const container = document.getElementById('questList');
-            container.innerHTML = '';
-            
-            let filtered = quests.filter(q => q.age === currentAgeGroup);
-            if (filter !== 'all') {
-                filtered = filtered.filter(q => q.category === filter);
-            }
-
-            if (filtered.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 italic col-span-full text-center py-8">No quests found in this category for this age group.</p>';
-                return;
-            }
-
-            filtered.forEach(q => {
-                container.innerHTML += `
-                    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg">${q.category}</span>
-                                <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg">+${q.xp} XP</span>
-                            </div>
-                            <h3 class="font-bold text-slate-900 mb-1 text-sm sm:text-base">${q.title}</h3>
-                            <p class="text-xs text-slate-500 mb-4">${q.desc}</p>
-                        </div>
-                        <div>
-                            ${q.completed ? '<span class="inline-block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
-                              q.pending ? '<span class="inline-block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Parent Review ⏳</span>' :
-                              `<button onclick="submitQuest(${q.id})" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md">Submit for Review</button>`}
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function filterCategory(cat) {
-            document.querySelectorAll('.filter-btn').forEach(b => {
-                b.classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
-                b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
-            });
-            event.target.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
-            event.target.classList.remove('bg-white', 'text-slate-600', 'border');
-            renderQuests(cat);
-        }
-
-        function submitQuest(id) {
-            const q = quests.find(item => item.id === id);
-            if (q) {
-                q.pending = true;
-                renderQuests();
-                renderParentPortal();
-            }
-        }
-
-        function renderParentPortal() {
-            const container = document.getElementById('pendingVerificationList');
-            container.innerHTML = '';
-            const pending = quests.filter(q => q.pending && !q.completed);
-
-            if (pending.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 italic">No pending quest submissions right now.</p>';
-                return;
-            }
-
-            pending.forEach(q => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/60">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-md">Ages ${q.age}</span>
-                            <h4 class="font-bold text-sm text-slate-900 mt-1">${q.title}</h4>
-                            <p class="text-xs text-slate-500">Reward: +${q.xp} XP & Badge (${q.badge})</p>
-                        </div>
-                        <button onclick="approveQuest(${q.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-emerald-600/20">Approve</button>
-                    </div>
-                `;
-            });
-        }
-
-        function approveQuest(id) {
-            const q = quests.find(item => item.id === id);
-            if (q) {
-                q.pending = false;
-                q.completed = true;
-                totalXp += q.xp;
-                document.getElementById('totalXp').innerText = totalXp;
-                renderQuests();
-                renderTrophies();
-                renderParentPortal();
-            }
-        }
-
-        function renderTrophies() {
-            const container = document.getElementById('trophyList');
-            container.innerHTML = '';
-            const completed = quests.filter(q => q.completed);
-
-            if (completed.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 italic col-span-full text-center py-8">No badges unlocked yet. Complete quests to earn badges!</p>';
-                return;
-            }
-
-            completed.forEach(q => {
-                container.innerHTML += `
-                    <div class="bg-white/90 backdrop-blur-md border border-emerald-200/80 rounded-2xl p-4 text-center flex flex-col items-center justify-center shadow-sm">
-                        <span class="text-3xl mb-2">🏆</span>
-                        <h4 class="font-bold text-xs text-slate-900">${q.badge}</h4>
-                        <p class="text-[10px] text-emerald-700 font-semibold mt-1">Unlocked (+${q.xp} XP)</p>
-                    </div>
-                `;
-            });
-        }
-
-        function openAiModal() { document.getElementById('aiModal').classList.remove('hidden'); }
-        function closeAiModal() { document.getElementById('aiModal').classList.add('hidden'); }
-
-        function askAi() {
-            const input = document.getElementById('aiInput');
-            const chat = document.getElementById('aiChatWindow');
-            const query = input.value.trim();
-            if (!query) return;
-
-            chat.innerHTML += `<div class="bg-indigo-50 p-3 rounded-2xl text-slate-800 ml-6 text-right">${query}</div>`;
-            input.value = '';
-
-            setTimeout(() => {
-                let reply = "That is a brilliant practical inquiry! To master this skill safely, always gather your tools first, work methodically, and ensure adult supervision if handling sharp tools or heavy equipment.";
-                if (query.toLowerCase().includes('bike') || query.toLowerCase().includes('tire') || query.toLowerCase().includes('puncture')) {
-                    reply = "To mend a bike puncture: 1. Unclip the brakes and remove the wheel. 2. Use tyre levers to pop the tyre off and pull out the inner tube. 3. Find the leak, roughen around it with sandpaper, apply vulcanising glue, press the patch firmly, and reassemble!";
-                } else if (query.toLowerCase().includes('oil') || query.toLowerCase().includes('car') || query.toLowerCase().includes('engine')) {
-                    reply = "Checking car fluid levels: 1. Ensure the engine is cold and parked on flat ground. 2. Pull the oil dipstick, wipe it clean with a rag, reinsert it fully, and pull it out again to check the level is between the min/max markers.";
-                } else if (query.toLowerCase().includes('budget') || query.toLowerCase().includes('money')) {
-                    reply = "Building a solid budget: 1. List all incoming funds (allowance, earnings). 2. Categorize fixed expenses vs savings goals. 3. Always pay yourself first by putting a percentage into savings!";
-                }
-                chat.innerHTML += `<div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 text-slate-700 mr-6">${reply}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            }, 600);
-        }
-    </script>
-</body>
-</html>
+            { id: 13, age: '12-16', title: 'Basic Car Maintenance & Fluid Checks', category: 'Mechanical & Build', xp: 150, desc: 'Safely check engine oil dipstick, coolant levels, screen wash, and measure tire pressures.', completed: false, pending: false
