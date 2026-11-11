@@ -32,11 +32,11 @@
             <p class="text-slate-600 text-sm mb-6">Empower the next generation with a massive curriculum of real-world life skills quests, 10-part quizzes, and multimedia verification.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
-                <!-- Single User Tier (£5.99) -->
+                <!-- Single User Tier (£4.99) -->
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between">
                     <div>
                         <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg">Single Household</span>
-                        <h3 class="text-xl font-extrabold text-slate-900 mt-3">£5.99</h3>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-3">£4.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
                             <li>✅ Massive quest & quiz library</li>
@@ -44,8 +44,8 @@
                             <li>✅ AI Quest Coach</li>
                         </ul>
                     </div>
-                    <a href="https://buy.stripe.com/cNi8wP3I16kI0I7fkY8EM08" target="_blank" class="mt-6 block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
-                        Get Single Access (£5.99)
+                    <a href="https://buy.stripe.com/eVqdR9a6p9wUfD1gp28EM09" target="_blank" class="mt-6 block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
+                        Get Single Access (£4.99)
                     </a>
                 </div>
 
@@ -61,7 +61,7 @@
                             <li>✅ Teacher verification dashboard</li>
                         </ul>
                     </div>
-                    <a href="https://buy.stripe.com/5kQeVd3I14cA8azc8M8EM07" target="_blank" class="mt-6 block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
+                    <a href="https://buy.stripe.com/6oU4gz1zTdNa2Qf3Cg8EM0a" target="_blank" class="mt-6 block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs text-center transition-all shadow-md">
                         Get Group Access (£99.99)
                     </a>
                 </div>
@@ -114,7 +114,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openPaywallModal()" class="bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
-                    🔒 Pricing (£5.99 / £99)
+                    🔒 Pricing (£4.99 / £99)
                 </button>
                 <button onclick="openAiModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all">
                     🤖 AI Coach
@@ -212,7 +212,6 @@
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
-        // Expanded curriculum library across multiple subjects (Kitchen, DIY, Garden, Build, Finance, Self-Reliance)
         let quests = JSON.parse(localStorage.getItem('skillseed_quests_data')) || [
             // --- KITCHEN CRAFT / COOKING SKILLS ---
             { id: 101, age: '6-8', title: 'Safe Knife Handling & Fruit Chopping', category: 'Kitchen Craft', xp: 35, badge: '🔪 Safe Chef', desc: 'Learn the claw grip and safely slice soft fruits like bananas and strawberries.', steps: ["1. Wash hands and fruit thoroughly.", "2. Form a 'bear claw' with your non-knife hand.", "3. Slice gently with a butter or plastic safety knife."], quiz: Array(10).fill(0).map((_, i) => ({ q: `Kitchen Safety Q${i+1}: What grip protects your fingers?`, options: ["The bear claw grip", "Holding the blade", "No grip"], answer: 0 })), completed: false, pending: false, photoData: null, videoData: null, quizAnswers: {} },
