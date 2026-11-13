@@ -95,7 +95,7 @@
 
             <div class="pt-4 border-t border-slate-100 flex gap-3">
                 <button onclick="closeLessonModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition-all">Close</button>
-                <button id="lessonSubmitBtn" onclick="" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md">Submit Evidence & Quiz</button>
+                <button id="lessonSubmitBtn" onclick="" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md hidden">Submit Evidence & Quiz</button>
             </div>
         </div>
     </div>
@@ -207,7 +207,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: ROBUST AI AUDIO TUTORIAL SYNTHESIS -->
+    <!-- SCRIPT LOGIC: GATED STEP-BY-STEP LEARNING FLOW -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
@@ -263,11 +263,11 @@
                 return;
             }
 
-            window.speechSynthesis.cancel(); // Clear prior speech queue
+            window.speechSynthesis.cancel(); 
 
             const fullText = `Masterclass lesson for ${title}. Here are the instructions: ${stepsArray.join('. ')}`;
             currentUtterance = new SpeechSynthesisUtterance(fullText);
-            currentUtterance.rate = 0.95; // Clear natural pacing
+            currentUtterance.rate = 0.95; 
             currentUtterance.pitch = 1.0;
 
             const statusEl = document.getElementById('audioStatus');
@@ -380,7 +380,6 @@
                                 age: age,
                                 title: `${subj} Quest Level ${v} (${cat.name})`,
                                 category: cat.name,
-                                titleOnly: `${subj} Level ${v}`,
                                 xp: xpVal,
                                 badge: `${cat.icon} ${subj} Pro ${v}`,
                                 desc: `Master essential practical principles of ${subj.toLowerCase()} tailored for developmental stage ${age}. Complete instructions, AI voice tutorial, and applied techniques.`,
@@ -435,25 +434,33 @@
         function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
 
         let activeQuestId = null;
+        let lessonUnlocked = false; // Gating flag
 
         function openLessonModal(id) {
             const q = quests.find(item => item.id === id);
             if (!q) return;
             activeQuestId = id;
+            lessonUnlocked = false; // Reset gate on open
 
             document.getElementById('lessonTitle').innerText = q.title;
+            renderLessonModalBody(q);
+            document.getElementById('lessonModal').classList.remove('hidden');
+        }
+
+        function renderLessonModalBody(q) {
             const content = document.getElementById('lessonContent');
+            const submitBtn = document.getElementById('lessonSubmitBtn');
             
             let html = '';
 
-            // AI Voice Tutorial Player Banner with Status
+            // AI Voice Tutor & Audio Controls
             const stepsJsonEscaped = JSON.stringify(q.lessonSteps).replace(/"/g, '&quot;');
             const titleEscaped = q.title.replace(/"/g, '&quot;');
 
             html += `<div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <h4 class="font-extrabold text-sm flex items-center gap-2">🤖 AI Voice Tutor & Masterclass</h4>
-                    <p class="text-xs text-indigo-100 mt-1" id="audioStatus">Status: Ready to play audio tutorial</p>
+                    <p class="text-xs text-indigo-100 mt-1" id="audioStatus">Status: Listen to audio tutor or study guide</p>
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto">
                     <button onclick='speakLessonText("${titleEscaped}", ${stepsJsonEscaped})' class="flex-1 sm:flex-none bg-white text-indigo-700 hover:bg-indigo-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow transition-all">▶ Play Audio</button>
@@ -461,65 +468,79 @@
                 </div>
             </div>`;
 
-            // Step-by-Step Lesson Guide
+            // Step-by-Step Teaching Guide (Always visible to study)
             html += '<div class="space-y-3 pt-2"><p class="font-bold text-slate-900">📖 Step-by-Step Teaching Guide:</p>';
             q.lessonSteps.forEach(step => {
                 html += `<div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 text-slate-700 leading-relaxed">${step}</div>`;
             });
             html += '</div>';
 
-            // Quiz Section
-            html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all 10 questions correctly after studying the lesson):</p>';
-            q.quiz.forEach((item, idx) => {
-                html += `<div class="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2">
-                    <p class="font-semibold text-xs text-indigo-900">Q${idx+1}: ${item.q}</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">`;
-                item.options.forEach((opt, oIdx) => {
-                    const isSelected = q.quizAnswers[idx] === oIdx ? 'bg-indigo-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200';
-                    html += `<button onclick="selectQuizAnswer(${id}, ${idx}, ${oIdx})" class="p-2 rounded-xl text-xs transition-all text-center ${isSelected}">${opt}</button>`;
-                });
-                html += `</div></div>`;
-            });
-            html += '</div>';
-
-            // Proof Upload Section
-            html += `<div class="mt-6 space-y-4 pt-4 border-t border-slate-200">
-                <p class="font-bold text-slate-900">📸 & 🎥 Upload Proof (Stored Locally):</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
-                        <label class="block text-xs font-bold text-slate-700">Take / Upload Photo Proof</label>
-                        <input type="file" accept="image/*" capture="environment" onchange="handlePhotoUpload(event, ${id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                        ${q.photoData ? '<span class="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-md font-bold">Photo Attached ✅</span>' : ''}
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
-                        <label class="block text-xs font-bold text-slate-700">Record Video / Audio Proof</label>
-                        <input type="file" accept="video/*,audio/*" capture="camcorder" onchange="handleVideoUpload(event, ${id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        ${q.videoData ? '<span class="inline-block text-[10px] bg-indigo-100 text-indigo-800 px-2 py-1 rounded-md font-bold">Recording Attached ✅</span>' : ''}
-                    </div>
-                </div>
-            </div>`;
-
-            content.innerHTML = html;
-
-            const submitBtn = document.getElementById('lessonSubmitBtn');
-            if (q.completed) {
-                submitBtn.innerText = 'Completed ✅';
-                submitBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
-                submitBtn.onclick = null;
-            } else if (q.pending) {
-                submitBtn.innerText = 'Pending Review by Parent/Teacher ⏳';
-                submitBtn.className = 'flex-1 bg-amber-100 text-amber-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
-                submitBtn.onclick = null;
+            // Gated Quiz Section Button or Unlocked Quiz
+            if (!lessonUnlocked && !q.completed && !q.pending) {
+                html += `<div class="mt-6 p-6 bg-amber-50 border border-amber-200 rounded-2xl text-center space-y-3">
+                    <p class="font-bold text-sm text-amber-900">🔒 Knowledge Quiz is Locked</p>
+                    <p class="text-xs text-amber-700">Study the teaching guide and listen to the AI voice tutor above before unlocking the 10-part assessment.</p>
+                    <button onclick="unlockQuiz(${q.id})" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-md">Unlock Knowledge Quiz 🔓</button>
+                </div>`;
+                submitBtn.classList.add('hidden');
             } else {
-                submitBtn.innerText = 'Submit Quiz & Evidence for Review';
-                submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md';
-                submitBtn.onclick = function() {
-                    stopSpeech();
-                    submitQuestWithValidation(id);
-                };
+                // Quiz is Unlocked
+                html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all 10 questions correctly):</p>';
+                q.quiz.forEach((item, idx) => {
+                    html += `<div class="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2">
+                        <p class="font-semibold text-xs text-indigo-900">Q${idx+1}: ${item.q}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">`;
+                    item.options.forEach((opt, oIdx) => {
+                        const isSelected = q.quizAnswers[idx] === oIdx ? 'bg-indigo-600 text-white font-bold' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200';
+                        html += `<button onclick="selectQuizAnswer(${q.id}, ${idx}, ${oIdx})" class="p-2 rounded-xl text-xs transition-all text-center ${isSelected}">${opt}</button>`;
+                    });
+                    html += `</div></div>`;
+                });
+                html += '</div>';
+
+                // Proof Upload Section
+                html += `<div class="mt-6 space-y-4 pt-4 border-t border-slate-200">
+                    <p class="font-bold text-slate-900">📸 & 🎥 Upload Proof (Stored Locally):</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">Take / Upload Photo Proof</label>
+                            <input type="file" accept="image/*" capture="environment" onchange="handlePhotoUpload(event, ${q.id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                            ${q.photoData ? '<span class="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2 py-1 rounded-md font-bold">Photo Attached ✅</span>' : ''}
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">Record Video / Audio Proof</label>
+                            <input type="file" accept="video/*,audio/*" capture="camcorder" onchange="handleVideoUpload(event, ${q.id})" class="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                            ${q.videoData ? '<span class="inline-block text-[10px] bg-indigo-100 text-indigo-800 px-2 py-1 rounded-md font-bold">Recording Attached ✅</span>' : ''}
+                        </div>
+                    </div>
+                </div>`;
+
+                submitBtn.classList.remove('hidden');
+                if (q.completed) {
+                    submitBtn.innerText = 'Completed ✅';
+                    submitBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
+                    submitBtn.onclick = null;
+                } else if (q.pending) {
+                    submitBtn.innerText = 'Pending Review by Parent/Teacher ⏳';
+                    submitBtn.className = 'flex-1 bg-amber-100 text-amber-700 font-bold py-3 rounded-xl text-xs cursor-not-allowed';
+                    submitBtn.onclick = null;
+                } else {
+                    submitBtn.innerText = 'Submit Quiz & Evidence for Review';
+                    submitBtn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md';
+                    submitBtn.onclick = function() {
+                        stopSpeech();
+                        submitQuestWithValidation(q.id);
+                    };
+                }
             }
 
-            document.getElementById('lessonModal').classList.remove('hidden');
+            content.innerHTML = html;
+        }
+
+        function unlockQuiz(id) {
+            lessonUnlocked = true;
+            const q = quests.find(item => item.id === id);
+            if (q) renderLessonModalBody(q);
         }
 
         function selectQuizAnswer(questId, qIdx, optIdx) {
@@ -527,7 +548,7 @@
             if (!q) return;
             q.quizAnswers[qIdx] = optIdx;
             saveState();
-            openLessonModal(questId);
+            renderLessonModalBody(q);
         }
 
         function handlePhotoUpload(event, questId) {
@@ -539,7 +560,7 @@
                 if (q) {
                     q.photoData = e.target.result;
                     saveState();
-                    openLessonModal(questId);
+                    renderLessonModalBody(q);
                 }
             };
             reader.readAsDataURL(file);
@@ -554,7 +575,7 @@
                 if (q) {
                     q.videoData = e.target.result;
                     saveState();
-                    openLessonModal(questId);
+                    renderLessonModalBody(q);
                 }
             };
             reader.readAsDataURL(file);
@@ -637,7 +658,7 @@
                             <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 AI Voice Lesson & Quiz</button>
                             ${q.completed ? '<span class="block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
                               q.pending ? '<span class="block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Review ⏳</span>' :
-                              `<span class="block w-full text-center py-1.5 text-[10px] text-slate-400 italic">Listen to lesson, pass quiz & submit proof</span>`}
+                              `<span class="block w-full text-center py-1.5 text-[10px] text-slate-400 italic">Study lesson, pass quiz & submit proof</span>`}
                         </div>
                     </div>
                 `;
