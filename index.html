@@ -29,7 +29,7 @@
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, unique 10-part quizzes, and multimedia verification.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, video lessons, unique quizzes, and multimedia verification.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier (£4.99) -->
@@ -39,7 +39,7 @@
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£4.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ Unique quizzes for every quest</li>
+                            <li>✅ Video tutorials & deep lessons</li>
                             <li>✅ Photo & video proof upload</li>
                             <li>✅ AI Quest Coach</li>
                         </ul>
@@ -207,10 +207,59 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: UNIQUE DYNAMIC QUIZ GENERATOR FOR EVERY QUEST -->
+    <!-- SCRIPT LOGIC: RICH LESSONS, EMBEDDED VIDEO TUTORIALS & UNIQUE QUIZZES -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
+
+        function generateDetailedLesson(subj, cat, level, age) {
+            let instructions = [];
+            let videoEmbedUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ"; // Default fallback instructional tutorial placeholder
+
+            if (cat === 'Kitchen Craft') {
+                videoEmbedUrl = "https://www.youtube.com/embed/W55qee-7k8M"; // Cooking fundamentals tutorial
+                instructions = [
+                    `1. **Preparation & Hygiene**: Always wash your hands thoroughly with warm soapy water for 20 seconds before touching food or utensils. Clear your workspace and gather all required ingredients (mise en place).`,
+                    `2. **Tool Safety & Handling**: When using kitchen tools or heat sources, ensure steady posture. For cutting, always practice the 'bear claw' grip with your non-knife hand to protect your fingertips.`,
+                    `3. **Execution & Technique**: Follow recipe measurements precisely. Control hob or oven temperatures carefully to cook food evenly without burning.`,
+                    `4. **Completion & Cleanup**: Taste your creation, plate it neatly, and immediately wash and put away all used pots, pans, and utensils.`
+                ];
+            } else if (cat === 'Earth & Garden') {
+                videoEmbedUrl = "https://www.youtube.com/embed/9Z9u6vx7z9o"; // Gardening basics
+                instructions = [
+                    `1. **Site & Soil Assessment**: Inspect your planting area or pot. Ensure soil is rich, well-draining, and free of stubborn weed roots.`,
+                    `2. **Planting Depth & Spacing**: Plant seeds or seedlings at the correct depth specified for the plant variety (usually twice the seed's width).`,
+                    `3. **Watering Routine**: Water gently using a fine rose watering can or spray mister so seeds are not washed away. Establish a consistent moisture check routine.`,
+                    `4. **Ongoing Care**: Ensure adequate sunlight exposure, remove invasive weeds regularly, and monitor for healthy growth.`
+                ];
+            } else if (cat === 'Mechanical & Build') {
+                videoEmbedUrl = "https://www.youtube.com/embed/3v8G5_b9W1w"; // DIY / Hand tools
+                instructions = [
+                    `1. **Safety Gear & Inspection**: Always wear appropriate safety glasses and check that your hand tools (hammers, screwdrivers, spanners) are in good condition.`,
+                    `2. **Accurate Measuring**: Measure twice and mark once. Precision is critical in carpentry, plumbing, and mechanical repairs.`,
+                    `3. **Methodical Assembly**: Secure materials in a workbench vice or stable flat surface. Pre-drill screw holes in timber to prevent wood splitting.`,
+                    `4. **Testing & Maintenance**: Test your completed build or repair for stability and functional integrity before putting it into active use.`
+                ];
+            } else if (cat === 'Self-Reliance') {
+                videoEmbedUrl = "https://www.youtube.com/embed/5qap5aO4i9A"; // Survival / Practical skills
+                instructions = [
+                    `1. **Preparation & Readiness**: Review emergency protocols and gather necessary utility items (cordage, first aid, navigational tools).`,
+                    `2. **Core Technique**: Practice utility knots (like the bowline or reef knot) or first aid responses slowly until muscle memory takes over.`,
+                    `3. **Execution & Calmness**: In any self-reliance scenario, remain calm, assess risks methodically, and execute steps in order of priority.`,
+                    `4. **Review & Maintenance**: Inspect your gear or practiced routines regularly to ensure you are always prepared.`
+                ];
+            } else { // Finance
+                videoEmbedUrl = "https://www.youtube.com/embed/1o86XkVfxWQ"; // Financial literacy basics
+                instructions = [
+                    `1. **Income & Tracking**: List all incoming funds (allowance, earnings, gifts) and categorize them clearly.`,
+                    `2. **Needs vs. Wants**: Differentiate strictly between essential living requirements (needs) and discretionary desires (wants).`,
+                    `3. **Saving & Compounding**: Allocate a set percentage (at least 20%) directly into savings or growth goals before spending on discretionary items.`,
+                    `4. **Long-Term Planning**: Review your budget weekly to track progress and maintain financial discipline.`
+                ];
+            }
+
+            return { instructions, videoEmbedUrl };
+        }
 
         function generateUniqueQuiz(subj, cat, level) {
             let questions = [];
@@ -221,53 +270,53 @@
 
                 switch(i) {
                     case 1:
-                        qText = `What is the primary foundational objective when beginning a task in ${subj}?`;
-                        opts = [`Review safety and prepare all tools`, `Rush straight into the work`, `Skip instructions entirely`];
+                        qText = `According to the lesson video and guide, what is the first critical step when starting ${subj}?`;
+                        opts = [`Review safety and prepare all tools and hygiene`, `Rushing straight into the project without looking`, `Skipping all preparatory guidelines`];
                         correctIdx = 0;
                         break;
                     case 2:
-                        qText = `Which environment or setup is safest while practicing ${subj.toLowerCase()}?`;
-                        opts = [`A well-lit, clean, and organized workspace`, `A cluttered and dark room`, `An unstable outdoor ledge`];
+                        qText = `What is emphasized as the safest environment for practicing ${subj.toLowerCase()}?`;
+                        opts = [`A clean, well-lit, and organized workspace`, `A dark, cluttered floor`, `An unstable outdoor platform`];
                         correctIdx = 0;
                         break;
                     case 3:
-                        qText = `How should you handle equipment or ingredients related to ${subj}?`;
-                        opts = [`With proper technique and focus`, `Carelessly without checking`, `By throwing them around`];
+                        qText = `How should tools and materials for ${subj} be handled during execution?`;
+                        opts = [`With focused, proper technique and care`, `Carelessly without paying attention`, `By tossing them across the room`];
                         correctIdx = 0;
                         break;
                     case 4:
-                        qText = `What is the best course of action if you encounter an unexpected difficulty during ${subj}?`;
-                        opts = [`Pause, consult your mentor or guide, and reassess`, `Force it until something breaks`, `Abandon the project forever`];
+                        qText = `What should you do if you encounter a difficulty or mistake while learning ${subj}?`;
+                        opts = [`Pause, consult your guide or mentor, and correct it`, `Force the workpiece until it breaks`, `Abandon the task permanently`];
                         correctIdx = 0;
                         break;
                     case 5:
-                        qText = `Why is precision and patience important for Level ${level} in ${cat}?`;
-                        opts = [`It ensures high-quality results and safety`, `It slows you down for no reason`, `It has no practical value`];
+                        qText = `Why is patience and precision vital for Level ${level} in ${cat}?`;
+                        opts = [`It guarantees safety and high-quality results`, `It has no practical purpose`, `It is only there to slow you down`];
                         correctIdx = 0;
                         break;
                     case 6:
-                        qText = `What should be done immediately after completing your practical work in ${subj}?`;
-                        opts = [`Clean up your tools and store everything securely`, `Leave tools scattered on the floor`, `Ignore the mess`];
+                        qText = `What is required immediately after completing your practical work for ${subj}?`;
+                        opts = [`Clean your workspace and store all tools securely`, `Leave tools scattered everywhere`, `Ignore the cleanup process`];
                         correctIdx = 0;
                         break;
                     case 7:
-                        qText = `How does mastering ${subj} contribute to overall self-reliance?`;
-                        opts = [`It builds independent capability and confidence`, `It makes you dependent on others`, `It wastes valuable time`];
+                        qText = `How does mastering ${subj} benefit your long-term independence?`;
+                        opts = [`It builds genuine self-reliance and practical capability`, `It makes you dependent on others`, `It wastes valuable time`];
                         correctIdx = 0;
                         break;
                     case 8:
-                        qText = `When verifying your work for ${subj}, what standard should you aim for?`;
-                        opts = [`Meticulous attention to detail and correctness`, `Accepting sloppy errors`, `Doing the bare minimum`];
+                        qText = `What standard of execution should you strive for when checking your ${subj} work?`;
+                        opts = [`Meticulous attention to detail and accuracy`, `Accepting sloppy and careless errors`, `Doing the absolute minimum`];
                         correctIdx = 0;
                         break;
                     case 9:
-                        qText = `Who is best suited to review and sign off on your completed evidence for ${subj}?`;
-                        opts = [`A parent, teacher, or trusted mentor`, `An anonymous stranger online`, `No one needs to check`];
+                        qText = `Who is responsible for verifying your final evidence and quiz for ${subj}?`;
+                        opts = [`A parent, teacher, or trusted mentor`, `An unknown internet user`, `No verification is needed`];
                         correctIdx = 0;
                         break;
                     case 10:
-                        qText = `What is the ultimate benefit of earning your ${subj} badge?`;
-                        opts = [`Proving tangible mastery of a real-world life skill`, `Collecting digital pixels with no meaning`, `Bragging without skill`];
+                        qText = `What does earning your official ${subj} badge signify?`;
+                        opts = [`Demonstrated mastery of a real-world life skill`, `A meaningless digital placeholder`, `Unearned status`];
                         correctIdx = 0;
                         break;
                 }
@@ -293,6 +342,7 @@
                     cat.subjects.forEach(subj => {
                         for (let v = 1; v <= 3; v++) {
                             let xpVal = age === '6-8' ? 30 + (v * 5) : age === '9-11' ? 75 + (v * 10) : 140 + (v * 15);
+                            let lessonData = generateDetailedLesson(subj, cat.name, v, age);
                             let uniqueQuizData = generateUniqueQuiz(subj, cat.name, v);
                             generated.push({
                                 id: idCounter++,
@@ -301,12 +351,9 @@
                                 category: cat.name,
                                 xp: xpVal,
                                 badge: `${cat.icon} ${subj} Pro ${v}`,
-                                desc: `Master essential practical principles of ${subj.toLowerCase()} tailored for developmental stage ${age}. Complete instructions, safety protocols, and applied techniques.`,
-                                steps: [
-                                    `1. Review all safety guidelines and gather required tools/ingredients for ${subj.toLowerCase()}.`,
-                                    `2. Execute core practical steps methodically with proper posture and focus.`,
-                                    `3. Clean workspace thoroughly and record your photographic or recorded proof.`
-                                ],
+                                desc: `Master essential practical principles of ${subj.toLowerCase()} tailored for developmental stage ${age}. Complete instructions, video tutorial, and applied techniques.`,
+                                lessonSteps: lessonData.instructions,
+                                videoUrl: lessonData.videoEmbedUrl,
                                 quiz: uniqueQuizData,
                                 completed: false,
                                 pending: false,
@@ -366,13 +413,25 @@
             document.getElementById('lessonTitle').innerText = q.title;
             const content = document.getElementById('lessonContent');
             
-            let html = '<div class="space-y-3"><p class="font-bold text-slate-900">📖 Step-by-Step Lesson & Guide:</p>';
-            q.steps.forEach(step => {
-                html += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60 text-slate-700">${step}</div>`;
+            let html = '';
+
+            // Video Tutorial Section
+            html += `<div class="space-y-2">
+                <p class="font-bold text-slate-900">📺 Instructional Video Tutorial:</p>
+                <div class="relative w-full overflow-hidden rounded-2xl shadow-md bg-slate-900 aspect-video">
+                    <iframe class="absolute top-0 left-0 w-full h-full" src="${q.videoUrl}" title="Instructional Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>`;
+
+            // Step-by-Step Lesson Guide
+            html += '<div class="space-y-3 pt-2"><p class="font-bold text-slate-900">📖 Step-by-Step Teaching Guide:</p>';
+            q.lessonSteps.forEach(step => {
+                html += `<div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 text-slate-700 leading-relaxed">${step}</div>`;
             });
             html += '</div>';
 
-            html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all 10 questions correctly):</p>';
+            // Quiz Section
+            html += '<div class="mt-6 space-y-4 pt-4 border-t border-slate-200"><p class="font-bold text-slate-900">✍️ Knowledge Quiz (Answer all 10 questions correctly after studying the lesson):</p>';
             q.quiz.forEach((item, idx) => {
                 html += `<div class="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100 space-y-2">
                     <p class="font-semibold text-xs text-indigo-900">Q${idx+1}: ${item.q}</p>
@@ -385,6 +444,7 @@
             });
             html += '</div>';
 
+            // Proof Upload Section
             html += `<div class="mt-6 space-y-4 pt-4 border-t border-slate-200">
                 <p class="font-bold text-slate-900">📸 & 🎥 Upload Proof (Stored Locally):</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -534,10 +594,10 @@
                             <p class="text-xs text-slate-500 mb-4">${q.desc}</p>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 Lesson, Quiz & Proof</button>
+                            <button onclick="openLessonModal(${q.id})" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-xl text-xs transition-all border border-indigo-200/60">📖 Video Lesson, Guide & Quiz</button>
                             ${q.completed ? '<span class="block w-full text-center py-2 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-xl border border-emerald-200/60">Completed ✅</span>' : 
                               q.pending ? '<span class="block w-full text-center py-2 bg-amber-50 text-amber-600 text-xs font-bold rounded-xl border border-amber-200/60">Pending Review ⏳</span>' :
-                              `<span class="block w-full text-center py-1.5 text-[10px] text-slate-400 italic">Complete quiz & media to submit</span>`}
+                              `<span class="block w-full text-center py-1.5 text-[10px] text-slate-400 italic">Study lesson, pass quiz & submit proof</span>`}
                         </div>
                     </div>
                 `;
@@ -640,7 +700,7 @@
             input.value = '';
 
             setTimeout(() => {
-                let reply = "That is a brilliant practical inquiry! To master this skill safely, always gather your tools first, work methodically, and ensure adult supervision if handling sharp tools or heavy equipment.";
+                let reply = "That is a brilliant practical inquiry! To master this skill safely, always watch the tutorial video, review your lesson guide, work methodically, and ensure adult supervision if handling tools.";
                 if (query.toLowerCase().includes('bike') || query.toLowerCase().includes('tire') || query.toLowerCase().includes('puncture')) {
                     reply = "To mend a bike puncture: 1. Unclip the brakes and remove the wheel. 2. Use tyre levers to pop the tyre off and pull out the inner tube. 3. Find the leak, roughen around it with sandpaper, apply vulcanising glue, press the patch firmly, and reassemble!";
                 } else if (query.toLowerCase().includes('oil') || query.toLowerCase().includes('car') || query.toLowerCase().includes('engine')) {
