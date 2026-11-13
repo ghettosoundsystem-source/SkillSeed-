@@ -207,7 +207,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: BUILT-IN AI VOICE TUTORIALS & ANIMATED CANVAS LESSONS -->
+    <!-- SCRIPT LOGIC: ROBUST AI AUDIO TUTORIAL SYNTHESIS -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
@@ -217,15 +217,15 @@
 
             if (cat === 'Kitchen Craft') {
                 instructions = [
-                    `1. Preparation & Hygiene: Wash hands thoroughly with warm soapy water for 20 seconds before touching food or utensils. Clear your workspace and gather all required ingredients (mise en place).`,
-                    `2. Tool Safety & Handling: When using kitchen tools or heat sources, ensure steady posture. For cutting, always practice the 'bear claw' grip with your non-knife hand to protect your fingertips.`,
+                    `1. Preparation & Hygiene: Wash hands thoroughly with warm soapy water for 20 seconds before touching food or utensils. Clear your workspace and gather all required ingredients.`,
+                    `2. Tool Safety & Handling: When using kitchen tools or heat sources, ensure steady posture. Always practice the 'bear claw' grip with your non-knife hand to protect your fingertips.`,
                     `3. Execution & Technique: Follow recipe measurements precisely. Control hob or oven temperatures carefully to cook food evenly without burning.`,
                     `4. Completion & Cleanup: Taste your creation, plate it neatly, and immediately wash and put away all used pots, pans, and utensils.`
                 ];
             } else if (cat === 'Earth & Garden') {
                 instructions = [
                     `1. Site & Soil Assessment: Inspect your planting area or pot. Ensure soil is rich, well-draining, and free of stubborn weed roots.`,
-                    `2. Planting Depth & Spacing: Plant seeds or seedlings at the correct depth specified for the plant variety (usually twice the seed's width).`,
+                    `2. Planting Depth & Spacing: Plant seeds or seedlings at the correct depth specified for the plant variety.`,
                     `3. Watering Routine: Water gently using a fine rose watering can or spray mister so seeds are not washed away. Establish a consistent moisture check routine.`,
                     `4. Ongoing Care: Ensure adequate sunlight exposure, remove invasive weeds regularly, and monitor for healthy growth.`
                 ];
@@ -255,22 +255,41 @@
             return instructions;
         }
 
-        function speakLessonText(textToSpeak) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Stop any ongoing speech
-                const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                utterance.rate = 1.0;
-                utterance.pitch = 1.0;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                alert('Text-to-speech is not supported on this browser.');
+        let currentUtterance = null;
+
+        function speakLessonText(title, stepsArray) {
+            if (!('speechSynthesis' in window)) {
+                alert('Text-to-speech audio is not supported in this browser.');
+                return;
             }
+
+            window.speechSynthesis.cancel(); // Clear prior speech queue
+
+            const fullText = `Masterclass lesson for ${title}. Here are the instructions: ${stepsArray.join('. ')}`;
+            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            currentUtterance.rate = 0.95; // Clear natural pacing
+            currentUtterance.pitch = 1.0;
+
+            const statusEl = document.getElementById('audioStatus');
+            if (statusEl) statusEl.innerText = "Status: Playing Audio Tutor... 🔊";
+
+            currentUtterance.onend = function() {
+                if (statusEl) statusEl.innerText = "Status: Audio playback complete ✅";
+            };
+
+            currentUtterance.onerror = function() {
+                if (statusEl) statusEl.innerText = "Status: Audio playback error. Please try again.";
+            };
+
+            window.speechSynthesis.speak(currentUtterance);
         }
 
         function stopSpeech() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
             }
+            const statusEl = document.getElementById('audioStatus');
+            if (statusEl) statusEl.innerText = "Status: Audio stopped ⏹";
         }
 
         function generateUniqueQuiz(subj, cat, level) {
@@ -361,6 +380,7 @@
                                 age: age,
                                 title: `${subj} Quest Level ${v} (${cat.name})`,
                                 category: cat.name,
+                                titleOnly: `${subj} Level ${v}`,
                                 xp: xpVal,
                                 badge: `${cat.icon} ${subj} Pro ${v}`,
                                 desc: `Master essential practical principles of ${subj.toLowerCase()} tailored for developmental stage ${age}. Complete instructions, AI voice tutorial, and applied techniques.`,
@@ -426,15 +446,17 @@
             
             let html = '';
 
-            // AI Voice Tutorial Player Banner
-            const fullLessonText = q.lessonSteps.join('. ');
+            // AI Voice Tutorial Player Banner with Status
+            const stepsJsonEscaped = JSON.stringify(q.lessonSteps).replace(/"/g, '&quot;');
+            const titleEscaped = q.title.replace(/"/g, '&quot;');
+
             html += `<div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <h4 class="font-extrabold text-sm flex items-center gap-2">🤖 AI Voice Tutor & Masterclass</h4>
-                    <p class="text-xs text-indigo-100 mt-1">Listen to the complete audio tutorial or read along with the step-by-step masterclass below.</p>
+                    <p class="text-xs text-indigo-100 mt-1" id="audioStatus">Status: Ready to play audio tutorial</p>
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto">
-                    <button onclick="speakLessonText('${encodeURIComponent(fullLessonText)}'.replace(/%20/g, ' '))" class="flex-1 sm:flex-none bg-white text-indigo-700 hover:bg-indigo-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow transition-all">▶ Play Audio</button>
+                    <button onclick='speakLessonText("${titleEscaped}", ${stepsJsonEscaped})' class="flex-1 sm:flex-none bg-white text-indigo-700 hover:bg-indigo-50 font-bold px-4 py-2.5 rounded-xl text-xs shadow transition-all">▶ Play Audio</button>
                     <button onclick="stopSpeech()" class="bg-indigo-800 hover:bg-indigo-900 text-indigo-200 font-bold px-3 py-2.5 rounded-xl text-xs transition-all">⏹ Stop</button>
                 </div>
             </div>`;
