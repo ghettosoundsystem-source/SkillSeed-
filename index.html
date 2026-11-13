@@ -29,7 +29,7 @@
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, video lessons, unique quizzes, and multimedia verification.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, subject-matched video lessons, and interactive quizzes.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier (£4.99) -->
@@ -39,7 +39,7 @@
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£4.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ Video tutorials & deep lessons</li>
+                            <li>✅ Curated video tutorials</li>
                             <li>✅ Photo & video proof upload</li>
                             <li>✅ AI Quest Coach</li>
                         </ul>
@@ -207,17 +207,26 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: RICH LESSONS, EMBEDDED VIDEO TUTORIALS & UNIQUE QUIZZES -->
+    <!-- SCRIPT LOGIC: CURATED SUBJECT-MATCHED TUTORIALS & UNIQUE QUIZZES -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
+        function getCuratedVideoUrl(cat) {
+            // Distinct educational tutorial video IDs for each category
+            if (cat === 'Kitchen Craft') return "https://www.youtube.com/embed/W55qee-7k8M"; // Cooking basics / kitchen safety
+            if (cat === 'Earth & Garden') return "https://www.youtube.com/embed/9Z9u6vx7z9o"; // Gardening & planting tutorial
+            if (cat === 'Mechanical & Build') return "https://www.youtube.com/embed/3v8G5_b9W1w"; // Hand tools & DIY woodworking
+            if (cat === 'Self-Reliance') return "https://www.youtube.com/embed/5qap5aO4i9A"; // Survival & knot tying
+            if (cat === 'Finance') return "https://www.youtube.com/embed/1o86XkVfxWQ"; // Financial literacy & budgeting
+            return "https://www.youtube.com/embed/W55qee-7k8M";
+        }
+
         function generateDetailedLesson(subj, cat, level, age) {
             let instructions = [];
-            let videoEmbedUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ"; // Default fallback instructional tutorial placeholder
+            let videoEmbedUrl = getCuratedVideoUrl(cat);
 
             if (cat === 'Kitchen Craft') {
-                videoEmbedUrl = "https://www.youtube.com/embed/W55qee-7k8M"; // Cooking fundamentals tutorial
                 instructions = [
                     `1. **Preparation & Hygiene**: Always wash your hands thoroughly with warm soapy water for 20 seconds before touching food or utensils. Clear your workspace and gather all required ingredients (mise en place).`,
                     `2. **Tool Safety & Handling**: When using kitchen tools or heat sources, ensure steady posture. For cutting, always practice the 'bear claw' grip with your non-knife hand to protect your fingertips.`,
@@ -225,7 +234,6 @@
                     `4. **Completion & Cleanup**: Taste your creation, plate it neatly, and immediately wash and put away all used pots, pans, and utensils.`
                 ];
             } else if (cat === 'Earth & Garden') {
-                videoEmbedUrl = "https://www.youtube.com/embed/9Z9u6vx7z9o"; // Gardening basics
                 instructions = [
                     `1. **Site & Soil Assessment**: Inspect your planting area or pot. Ensure soil is rich, well-draining, and free of stubborn weed roots.`,
                     `2. **Planting Depth & Spacing**: Plant seeds or seedlings at the correct depth specified for the plant variety (usually twice the seed's width).`,
@@ -233,7 +241,6 @@
                     `4. **Ongoing Care**: Ensure adequate sunlight exposure, remove invasive weeds regularly, and monitor for healthy growth.`
                 ];
             } else if (cat === 'Mechanical & Build') {
-                videoEmbedUrl = "https://www.youtube.com/embed/3v8G5_b9W1w"; // DIY / Hand tools
                 instructions = [
                     `1. **Safety Gear & Inspection**: Always wear appropriate safety glasses and check that your hand tools (hammers, screwdrivers, spanners) are in good condition.`,
                     `2. **Accurate Measuring**: Measure twice and mark once. Precision is critical in carpentry, plumbing, and mechanical repairs.`,
@@ -241,7 +248,6 @@
                     `4. **Testing & Maintenance**: Test your completed build or repair for stability and functional integrity before putting it into active use.`
                 ];
             } else if (cat === 'Self-Reliance') {
-                videoEmbedUrl = "https://www.youtube.com/embed/5qap5aO4i9A"; // Survival / Practical skills
                 instructions = [
                     `1. **Preparation & Readiness**: Review emergency protocols and gather necessary utility items (cordage, first aid, navigational tools).`,
                     `2. **Core Technique**: Practice utility knots (like the bowline or reef knot) or first aid responses slowly until muscle memory takes over.`,
@@ -249,7 +255,6 @@
                     `4. **Review & Maintenance**: Inspect your gear or practiced routines regularly to ensure you are always prepared.`
                 ];
             } else { // Finance
-                videoEmbedUrl = "https://www.youtube.com/embed/1o86XkVfxWQ"; // Financial literacy basics
                 instructions = [
                     `1. **Income & Tracking**: List all incoming funds (allowance, earnings, gifts) and categorize them clearly.`,
                     `2. **Needs vs. Wants**: Differentiate strictly between essential living requirements (needs) and discretionary desires (wants).`,
@@ -270,7 +275,7 @@
 
                 switch(i) {
                     case 1:
-                        qText = `According to the lesson video and guide, what is the first critical step when starting ${subj}?`;
+                        qText = `According to the video tutorial and lesson guide, what is the first critical step when starting ${subj}?`;
                         opts = [`Review safety and prepare all tools and hygiene`, `Rushing straight into the project without looking`, `Skipping all preparatory guidelines`];
                         correctIdx = 0;
                         break;
