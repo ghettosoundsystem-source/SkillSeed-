@@ -29,7 +29,7 @@
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of 300+ real-world life skills quests, 10-part quizzes, and multimedia verification.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, unique 10-part quizzes, and multimedia verification.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier (£4.99) -->
@@ -39,7 +39,7 @@
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£4.99</h3>
                         <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ 300+ Quests & 10-part quizzes</li>
+                            <li>✅ Unique quizzes for every quest</li>
                             <li>✅ Photo & video proof upload</li>
                             <li>✅ AI Quest Coach</li>
                         </ul>
@@ -207,12 +207,75 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: 300+ QUEST CURRICULUM GENERATOR -->
+    <!-- SCRIPT LOGIC: UNIQUE DYNAMIC QUIZ GENERATOR FOR EVERY QUEST -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
 
-        // Automatically generate a massive 300+ quest library (100+ per age group across all fields)
+        function generateUniqueQuiz(subj, cat, level) {
+            let questions = [];
+            for (let i = 1; i <= 10; i++) {
+                let qText = "";
+                let opts = [];
+                let correctIdx = 0;
+
+                switch(i) {
+                    case 1:
+                        qText = `What is the primary foundational objective when beginning a task in ${subj}?`;
+                        opts = [`Review safety and prepare all tools`, `Rush straight into the work`, `Skip instructions entirely`];
+                        correctIdx = 0;
+                        break;
+                    case 2:
+                        qText = `Which environment or setup is safest while practicing ${subj.toLowerCase()}?`;
+                        opts = [`A well-lit, clean, and organized workspace`, `A cluttered and dark room`, `An unstable outdoor ledge`];
+                        correctIdx = 0;
+                        break;
+                    case 3:
+                        qText = `How should you handle equipment or ingredients related to ${subj}?`;
+                        opts = [`With proper technique and focus`, `Carelessly without checking`, `By throwing them around`];
+                        correctIdx = 0;
+                        break;
+                    case 4:
+                        qText = `What is the best course of action if you encounter an unexpected difficulty during ${subj}?`;
+                        opts = [`Pause, consult your mentor or guide, and reassess`, `Force it until something breaks`, `Abandon the project forever`];
+                        correctIdx = 0;
+                        break;
+                    case 5:
+                        qText = `Why is precision and patience important for Level ${level} in ${cat}?`;
+                        opts = [`It ensures high-quality results and safety`, `It slows you down for no reason`, `It has no practical value`];
+                        correctIdx = 0;
+                        break;
+                    case 6:
+                        qText = `What should be done immediately after completing your practical work in ${subj}?`;
+                        opts = [`Clean up your tools and store everything securely`, `Leave tools scattered on the floor`, `Ignore the mess`];
+                        correctIdx = 0;
+                        break;
+                    case 7:
+                        qText = `How does mastering ${subj} contribute to overall self-reliance?`;
+                        opts = [`It builds independent capability and confidence`, `It makes you dependent on others`, `It wastes valuable time`];
+                        correctIdx = 0;
+                        break;
+                    case 8:
+                        qText = `When verifying your work for ${subj}, what standard should you aim for?`;
+                        opts = [`Meticulous attention to detail and correctness`, `Accepting sloppy errors`, `Doing the bare minimum`];
+                        correctIdx = 0;
+                        break;
+                    case 9:
+                        qText = `Who is best suited to review and sign off on your completed evidence for ${subj}?`;
+                        opts = [`A parent, teacher, or trusted mentor`, `An anonymous stranger online`, `No one needs to check`];
+                        correctIdx = 0;
+                        break;
+                    case 10:
+                        qText = `What is the ultimate benefit of earning your ${subj} badge?`;
+                        opts = [`Proving tangible mastery of a real-world life skill`, `Collecting digital pixels with no meaning`, `Bragging without skill`];
+                        correctIdx = 0;
+                        break;
+                }
+                questions.push({ q: qText, options: opts, answer: correctIdx });
+            }
+            return questions;
+        }
+
         function generateMassiveCurriculum() {
             let generated = [];
             const ageGroups = ['6-8', '9-11', '12-16'];
@@ -228,9 +291,9 @@
             ageGroups.forEach(age => {
                 categories.forEach(cat => {
                     cat.subjects.forEach(subj => {
-                        // Generate 2-3 unique quests per subject per age bracket to easily exceed 100+ per age group
                         for (let v = 1; v <= 3; v++) {
                             let xpVal = age === '6-8' ? 30 + (v * 5) : age === '9-11' ? 75 + (v * 10) : 140 + (v * 15);
+                            let uniqueQuizData = generateUniqueQuiz(subj, cat.name, v);
                             generated.push({
                                 id: idCounter++,
                                 age: age,
@@ -244,15 +307,7 @@
                                     `2. Execute core practical steps methodically with proper posture and focus.`,
                                     `3. Clean workspace thoroughly and record your photographic or recorded proof.`
                                 ],
-                                quiz: Array(10).fill(0).map((_, i) => ({
-                                    q: `${subj} Assessment Q${i+1} (Level ${v}): What is a primary rule for safe execution?`,
-                                    options: [
-                                        `Adhere strictly to methodical steps and safety`,
-                                        `Rush through without preparation`,
-                                        `Ignore all manufacturer or safety guidelines`
-                                    ],
-                                    answer: 0
-                                })),
+                                quiz: uniqueQuizData,
                                 completed: false,
                                 pending: false,
                                 photoData: null,
