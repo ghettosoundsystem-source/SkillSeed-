@@ -187,15 +187,51 @@
 
         <!-- TAB 2: TROPHY ROOM & CERTIFICATES -->
         <div id="viewTrophies" class="hidden space-y-6">
+            
+            <!-- VISUAL BADGE & CERTIFICATE SHOWCASE GALLERY -->
+            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                <h2 class="text-lg font-bold text-slate-900">🌟 Attainable Rewards Gallery</h2>
+                <p class="text-xs text-slate-600">Here are visual previews of the Bronze, Silver, and Gold badges and Certificates of Competence you can earn across all 5 skill categories:</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
+                        <div class="w-12 h-12 bg-amber-200 text-amber-800 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥉</div>
+                        <h4 class="font-bold text-xs text-amber-900">Bronze Tier Badge</h4>
+                        <p class="text-[10px] text-amber-700">Earned upon completing Level 1 foundational quests.</p>
+                    </div>
+                    <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
+                        <div class="w-12 h-12 bg-slate-300 text-slate-800 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥈</div>
+                        <h4 class="font-bold text-xs text-slate-800">Silver Tier Badge</h4>
+                        <p class="text-[10px] text-slate-600">Earned upon completing Level 2 intermediate quests.</p>
+                    </div>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
+                        <div class="w-12 h-12 bg-yellow-300 text-yellow-900 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥇</div>
+                        <h4 class="font-bold text-xs text-yellow-900">Gold Tier Badge</h4>
+                        <p class="text-[10px] text-yellow-700">Earned upon completing Level 3 mastery quests.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 border-2 border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm mt-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-4xl">📜</span>
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900">Certificate of Competence Preview</h4>
+                            <p class="text-xs text-slate-600 mt-0.5">Fully unlocked when all quests in a category are completed and verified. Ready for digital download or printing.</p>
+                        </div>
+                    </div>
+                    <button onclick="openCertificateModal('Kitchen Craft')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md whitespace-nowrap">Preview Certificate</button>
+                </div>
+            </div>
+
             <div>
-                <h2 class="text-lg font-bold text-slate-900 mb-3">Earned Bronze, Silver & Gold Badges</h2>
+                <h2 class="text-lg font-bold text-slate-900 mb-3">Your Earned Bronze, Silver & Gold Badges</h2>
                 <div id="trophyList" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <!-- Trophies injected via JS -->
                 </div>
             </div>
 
             <div class="pt-4 border-t border-slate-200">
-                <h2 class="text-lg font-bold text-slate-900 mb-3">Certificates of Competence</h2>
+                <h2 class="text-lg font-bold text-slate-900 mb-3">Your Unlocked Certificates of Competence</h2>
                 <p class="text-xs text-slate-500 mb-4">Complete all quests in a category to unlock your official Certificate of Competence.</p>
                 <div id="certificateList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Certificates injected via JS -->
@@ -751,6 +787,7 @@
                 q.pending = false;
                 q.completed = true;
                 totalXp += q.xp;
+                document.getElementById('totalXp').innerText = totalXp;
                 saveState();
                 renderQuests();
                 renderTrophies();
@@ -788,7 +825,6 @@
             let unlockedAny = false;
 
             categories.forEach(cat => {
-                // Check if all quests in this category for current age group are completed
                 const catQuests = quests.filter(q => q.category === cat && q.age === currentAgeGroup);
                 const completedCatQuests = catQuests.filter(q => q.completed);
                 const isFullyUnlocked = catQuests.length > 0 && catQuests.length === completedCatQuests.length;
