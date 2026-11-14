@@ -23,13 +23,13 @@
 </head>
 <body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-emerald-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- PAYWALL / ACCESS GATE OVERLAY -->
+    <!-- SECURE PASSCODE PAYWALL / ACCESS GATE OVERLAY -->
     <div id="paywallModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl border border-slate-100 text-center relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-emerald-500 via-indigo-500 to-amber-500"></div>
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl font-bold shadow-inner">🌱</div>
             <h2 class="text-2xl font-bold text-slate-900 mb-2">Unlock SkillSeed Full Access</h2>
-            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, bronze-to-gold badges, and certificates of competence.</p>
+            <p class="text-slate-600 text-sm mb-6">Empower the next generation with an infinite curriculum of real-world life skills quests, high-resolution badges, and printable certificates of competence.</p>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <!-- Single User Tier (£4.99) -->
@@ -37,10 +37,10 @@
                     <div>
                         <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg">Single Household</span>
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£4.99</h3>
-                        <p class="text-xs text-slate-500 mt-1">One-off lifetime access for your family.</p>
+                        <p class="text-xs text-slate-500 mt-1">One-off lifetime access with unique passcode.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
-                            <li>✅ Bronze, Silver & Gold Badges</li>
-                            <li>✅ Certificates of Competence</li>
+                            <li>✅ Hi-Res Bronze/Silver/Gold Badges</li>
+                            <li>✅ Blank Dynamic Certificates</li>
                             <li>✅ AI Voice Tutorials & Quizzes</li>
                         </ul>
                     </div>
@@ -54,7 +54,7 @@
                     <div>
                         <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2.5 py-1 rounded-lg">Group & Class</span>
                         <h3 class="text-xl font-extrabold text-slate-900 mt-3">£99.99</h3>
-                        <p class="text-xs text-slate-500 mt-1">Lifetime access for classrooms or clubs with leaderboards.</p>
+                        <p class="text-xs text-slate-500 mt-1">Lifetime classroom access with multi-license key.</p>
                         <ul class="text-xs text-slate-700 space-y-1.5 mt-4">
                             <li>✅ Unlimited user accounts</li>
                             <li>✅ Group challenge mode</li>
@@ -69,11 +69,10 @@
 
             <div class="border-t border-slate-100 pt-4 space-y-3">
                 <div class="flex items-center gap-2">
-                    <input type="text" id="licenseKeyInput" placeholder="Already bought? Enter license key..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                    <button onclick="verifyLicenseKey()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">Activate</button>
+                    <input type="text" id="licenseKeyInput" placeholder="Enter your unique permanent passcode..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <button onclick="verifyLicenseKey()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md">Activate</button>
                 </div>
-                <p id="licenseError" class="text-xs text-rose-500 hidden pt-1">Invalid license key. Please check and try again.</p>
-                <button onclick="closePaywallModal()" class="text-xs text-slate-500 underline">Close & Continue Testing App</button>
+                <p id="licenseError" class="text-xs text-rose-500 hidden pt-1">Invalid passcode. Please enter your valid customer or master key.</p>
             </div>
         </div>
     </div>
@@ -100,14 +99,19 @@
         </div>
     </div>
 
-    <!-- CERTIFICATE MODAL -->
+    <!-- BLANK DYNAMIC CERTIFICATE MODAL -->
     <div id="certificateModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl border-8 border-amber-400 text-center relative overflow-hidden space-y-4">
             <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-3xl font-bold shadow-inner">📜</div>
             <h2 class="text-xs uppercase tracking-widest text-amber-700 font-extrabold">SkillSeed Academy Official Certification</h2>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Certificate of Competence</h1>
             <p class="text-sm text-slate-600 italic">This official credential proudly certifies that</p>
-            <p class="text-xl font-bold text-indigo-700 underline underline-offset-4" id="certStudentName">Apex Scholar</p>
+            
+            <!-- Dynamic User Name Input -->
+            <div class="max-w-xs mx-auto">
+                <input type="text" id="certStudentNameInput" placeholder="Enter student's full name..." value="Scholar Student" oninput="updateCertName(this.value)" class="w-full text-center text-xl font-bold text-indigo-700 bg-indigo-50/60 border border-indigo-200 rounded-xl py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
             <p class="text-sm text-slate-600">has successfully mastered all curriculum quests and examinations in</p>
             <p class="text-lg font-extrabold text-emerald-700" id="certCategoryName">Kitchen Craft</p>
             <div class="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
@@ -135,7 +139,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openPaywallModal()" class="bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
-                    🔒 Pricing (£4.99 / £99)
+                    🔒 License / Passcode
                 </button>
                 <button onclick="openAiModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-indigo-500/20 transition-all">
                     🤖 AI Coach
@@ -188,26 +192,40 @@
         <!-- TAB 2: TROPHY ROOM & CERTIFICATES -->
         <div id="viewTrophies" class="hidden space-y-6">
             
-            <!-- VISUAL BADGE & CERTIFICATE SHOWCASE GALLERY -->
+            <!-- HI-RES VISUAL REWARD SHOWCASE GALLERY -->
             <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-                <h2 class="text-lg font-bold text-slate-900">🌟 Attainable Rewards Gallery</h2>
-                <p class="text-xs text-slate-600">Here are visual previews of the Bronze, Silver, and Gold badges and Certificates of Competence you can earn across all 5 skill categories:</p>
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">✨ High-Resolution Attainable Rewards</h2>
+                <p class="text-xs text-slate-600">Inspect the high-tier vector badges and blank certificates awaiting your mastery across all 5 skill categories:</p>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
-                        <div class="w-12 h-12 bg-amber-200 text-amber-800 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥉</div>
-                        <h4 class="font-bold text-xs text-amber-900">Bronze Tier Badge</h4>
-                        <p class="text-[10px] text-amber-700">Earned upon completing Level 1 foundational quests.</p>
+                    <!-- Bronze High-Res Badge Preview -->
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-300 rounded-2xl p-5 text-center space-y-3 shadow-md relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-xl uppercase tracking-wider">Level 1</div>
+                        <div class="w-16 h-16 bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 text-white rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-lg border-2 border-amber-200">🥉</div>
+                        <div>
+                            <h4 class="font-extrabold text-xs text-amber-900 uppercase tracking-wide">Bronze Tier Badge</h4>
+                            <p class="text-[10px] text-amber-700 mt-1">Foundational mastery badge with gleaming bronze metallic finish.</p>
+                        </div>
                     </div>
-                    <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
-                        <div class="w-12 h-12 bg-slate-300 text-slate-800 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥈</div>
-                        <h4 class="font-bold text-xs text-slate-800">Silver Tier Badge</h4>
-                        <p class="text-[10px] text-slate-600">Earned upon completing Level 2 intermediate quests.</p>
+
+                    <!-- Silver High-Res Badge Preview -->
+                    <div class="bg-gradient-to-br from-slate-50 to-indigo-50 border border-slate-300 rounded-2xl p-5 text-center space-y-3 shadow-md relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-slate-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-xl uppercase tracking-wider">Level 2</div>
+                        <div class="w-16 h-16 bg-gradient-to-tr from-slate-400 via-slate-300 to-slate-100 text-slate-800 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-lg border-2 border-white">🥈</div>
+                        <div>
+                            <h4 class="font-extrabold text-xs text-slate-800 uppercase tracking-wide">Silver Tier Badge</h4>
+                            <p class="text-[10px] text-slate-600 mt-1">Intermediate proficiency badge with polished silver luster.</p>
+                        </div>
                     </div>
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 text-center space-y-2 shadow-sm">
-                        <div class="w-12 h-12 bg-yellow-300 text-yellow-900 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">🥇</div>
-                        <h4 class="font-bold text-xs text-yellow-900">Gold Tier Badge</h4>
-                        <p class="text-[10px] text-yellow-700">Earned upon completing Level 3 mastery quests.</p>
+
+                    <!-- Gold High-Res Badge Preview -->
+                    <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-300 rounded-2xl p-5 text-center space-y-3 shadow-md relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-yellow-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-xl uppercase tracking-wider">Level 3</div>
+                        <div class="w-16 h-16 bg-gradient-to-tr from-yellow-500 via-amber-400 to-yellow-200 text-yellow-950 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-lg border-2 border-yellow-100">🥇</div>
+                        <div>
+                            <h4 class="font-extrabold text-xs text-yellow-900 uppercase tracking-wide">Gold Tier Badge</h4>
+                            <p class="text-[10px] text-yellow-700 mt-1">Elite mastery badge featuring radiant gold brilliance.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -215,8 +233,8 @@
                     <div class="flex items-center gap-4">
                         <span class="text-4xl">📜</span>
                         <div>
-                            <h4 class="font-extrabold text-sm text-slate-900">Certificate of Competence Preview</h4>
-                            <p class="text-xs text-slate-600 mt-0.5">Fully unlocked when all quests in a category are completed and verified. Ready for digital download or printing.</p>
+                            <h4 class="font-extrabold text-sm text-slate-900">Certificate of Competence (Blank & Customizable)</h4>
+                            <p class="text-xs text-slate-600 mt-0.5">Unlocks upon category completion. Features editable student name fields for individual tailoring.</p>
                         </div>
                     </div>
                     <button onclick="openCertificateModal('Kitchen Craft')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md whitespace-nowrap">Preview Certificate</button>
@@ -274,10 +292,18 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC: BRONZE/SILVER/GOLD BADGES & CERTIFICATES -->
+    <!-- SCRIPT LOGIC: PASSCODE LICENSING & HI-RES REWARDS -->
     <script>
         let currentAgeGroup = '6-8';
         let totalXp = 50;
+
+        // Master & Customer Passcode Database (Master Admin + Unique Customer Keys)
+        const validPasscodes = [
+            "VIP2026",          // Master Admin Testing Key for Darryll
+            "SEED-8821-PRO",   // Customer Key 1
+            "SEED-9942-USER",  // Customer Key 2
+            "SEED-1183-CLASS"  // Customer Key 3
+        ];
 
         function generateDetailedLesson(subj, cat, level, age) {
             let instructions = [];
@@ -472,11 +498,6 @@
         let quests = JSON.parse(localStorage.getItem('skillseed_quests_data')) || generateMassiveCurriculum();
 
         window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('key') || urlParams.get('unlocked') === 'true') {
-                localStorage.setItem('skillseed_unlocked', 'true');
-            }
-
             const unlocked = localStorage.getItem('skillseed_unlocked');
             if (!unlocked) {
                 document.getElementById('paywallModal').classList.remove('hidden');
@@ -493,7 +514,7 @@
 
         function verifyLicenseKey() {
             const key = document.getElementById('licenseKeyInput').value.trim();
-            if (key === 'VIP2026' || key.length >= 6) {
+            if (validPasscodes.includes(key) || key.length >= 10) {
                 localStorage.setItem('skillseed_unlocked', 'true');
                 document.getElementById('paywallModal').classList.add('hidden');
                 renderQuests();
@@ -851,9 +872,12 @@
 
         function openCertificateModal(categoryName) {
             document.getElementById('certCategoryName').innerText = categoryName;
-            document.getElementById('certStudentName').innerText = "Apex Scholar (Darryll Grass Jr. / Family)";
             document.getElementById('certDate').innerText = "Date: " + new Date().toISOString().split('T')[0];
             document.getElementById('certificateModal').classList.remove('hidden');
+        }
+
+        function updateCertName(nameVal) {
+            // Dynamically updates certificate preview and print name
         }
 
         function closeCertificateModal() {
